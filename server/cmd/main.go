@@ -47,7 +47,7 @@ func main() {
 	r := gin.Default()
 	v0 := r.Group("/v0")
 	{
-		v0.POST("/new_competition", controllers.CreateUser)
+		v0.POST("/new_competition", controllers.NewCompetition)
 	}
 
 	log.Infof("Server launched and running on http://localhost:%s\n", cfg.Port)

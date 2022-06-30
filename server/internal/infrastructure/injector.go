@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"context"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"net/http"
 	"uacs/internal/config"
@@ -30,6 +31,7 @@ func (e *environment) InjectController() controllers.Controllers {
 			Log:    e.logger,
 			Config: e.cfg,
 		},
+		Validator: validator.New(),
 	}
 }
 
