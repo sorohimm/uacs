@@ -6,7 +6,7 @@ services:
     container_name: mongodb
     restart: always
     env_file:
-      - ../configs/config.env
+      - ./db_config.env
     ports:
       - ${MONGODB_PORT:-27017}:27017
     networks:
