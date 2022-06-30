@@ -1,6 +1,7 @@
 package models
 
 type CompetitionParticipant struct {
+	UUID              string `json:"uuid"`
 	IRMStatus         string `json:"irm_status,omitempty"`
 	Code              string `json:"code,omitempty"`
 	Shift             string `json:"shift,omitempty"`
@@ -29,16 +30,16 @@ type CompetitionParticipant struct {
 }
 
 type CompetitionParticipantShortOutput struct {
-	Name            string           `json:"name,omitempty"`
-	Region          string           `json:"region,omitempty"`
-	RegionCode      string           `json:"region_code,omitempty"`
-	DistancesPoints []DistancePoints `json:"distances_points,omitempty"`
-	FinalPoints     int              `json:"final_points,omitempty"`
-	Count10         int              `json:"count_10,omitempty"`
-	Count9          int              `json:"count_9,omitempty"`
+	Name            string                `json:"name,omitempty"`
+	Region          string                `json:"region,omitempty"`
+	RegionCode      string                `json:"region_code,omitempty"`
+	DistancesPoints []DistancePointsShort `json:"distances_points,omitempty"`
+	FinalPoints     int                   `json:"final_points,omitempty"`
+	Count10         int                   `json:"count_10,omitempty"`
+	Count9          int                   `json:"count_9,omitempty"`
 }
 
-type DistancePoints struct {
+type DistancePointsShort struct {
 	Index    int `json:"index,omitempty"`
 	Distance int `json:"distance,omitempty"`
 	Count10  int `json:"count_10,omitempty"`
@@ -46,6 +47,7 @@ type DistancePoints struct {
 }
 
 type CompetitionJudge struct {
+	UUID       string `json:"uuid"`
 	Code       string `json:"code,omitempty"`
 	FirstName  string `json:"first_name,omitempty"`
 	LastName   string `json:"last_name,omitempty"`
