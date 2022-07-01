@@ -27,8 +27,8 @@ func New() (*Config, error) {
 		DevPort:  os.Getenv("MAIN_SERVER_DEV_PORT"),
 		ProdPort: os.Getenv("MAIN_SERVER_PROD_PORT"),
 		DBAuthData: DBAuthenticationData{
-			Username: os.Getenv("DB_USERNAME"),
-			Password: os.Getenv("DB_PASSWORD"),
+			Username: os.Getenv("DB_DEV_USERNAME"),
+			Password: os.Getenv("DB_DEV_PASSWORD"),
 			Host:     os.Getenv("DB_HOST"),
 			Port:     os.Getenv("DB_PORT"),
 			Name:     os.Getenv("DB_NAME"),

@@ -26,11 +26,11 @@ func (c *Controllers) NewCompetition(ctx *gin.Context) {
 		return
 	}
 
-	err = c.Services.NewCompetition(newCompetition)
+	competition, err := c.Services.NewCompetition(newCompetition)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, fmt.Sprintf(`{"error": "%s"}`, err.Error()))
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, "")
+	ctx.JSON(http.StatusCreated, competition)
 }

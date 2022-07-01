@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"uacs/internal/config"
@@ -12,6 +13,11 @@ type Repo struct {
 	Config *config.Config
 }
 
-func (r *Repo) NewCompetition(db *mongo.Database, newCompetition models.Competition) error {
+func (r *Repo) NewCompetition(collection *mongo.Collection, newCompetition models.Competition) error {
+	_, err := collection.InsertOne(context.Background(), newCompetition)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }

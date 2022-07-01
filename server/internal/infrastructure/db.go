@@ -18,12 +18,12 @@ type MongoClient struct {
 
 func InitMongoClient(logger *zap.SugaredLogger, cfg *config.Config, ctx context.Context) (interfaces.IDBHandler, error) {
 	clientOptions := options.Client().ApplyURI(cfg.DBAuthData.URL)
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-
+	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		logger.Error(err.Error())
 		return &MongoClient{}, errors.Wrap(err, "mongo initialization err")
 	}
+
 	logger.Info("db client init ok")
 
 	return &MongoClient{Client: client}, nil

@@ -14,12 +14,17 @@ type Services struct {
 	DbHandler interfaces.IDBHandler
 }
 
-func (s *Services) NewCompetition(newCompetition models.Competition) error {
+func (s *Services) NewCompetition(newCompetition models.Competition) (models.Competition, error) {
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
-	err := s.Repo.NewCompetition(database, newCompetition)
+	collection := database.Collection(s.Config.Collections.Competitions)
+
+	newCompetition.GenerateUUID()
+
+	err := s.Repo.NewCompetition(collection, newCompetition)
 	if err != nil {
 		s.Log.Errorf("Failed create new competition. Received error: %s", err.Error())
-		return err
+		return models.Competition{}, err
 	}
-	return nil
+
+	return newCompetition, nil
 }

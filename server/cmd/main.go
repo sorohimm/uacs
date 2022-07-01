@@ -44,6 +44,8 @@ func main() {
 
 	controllers := injector.InjectController()
 
+	gin.SetMode(gin.DebugMode)
+
 	r := gin.Default()
 	v0 := r.Group("/v0")
 	{
@@ -51,5 +53,5 @@ func main() {
 	}
 
 	log.Infof("Server launched and running on http://localhost:%s\n", cfg.DevPort)
-	log.Fatal(r.Run(cfg.DevPort))
+	log.Fatal(r.Run(":" + cfg.DevPort))
 }

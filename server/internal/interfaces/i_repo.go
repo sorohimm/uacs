@@ -6,5 +6,5 @@ import (
 )
 
 type IRepo interface {
-	NewCompetition(db *mongo.Database, competition models.Competition) error
+	NewCompetition(collection *mongo.Collection, competition models.Competition) error
 }

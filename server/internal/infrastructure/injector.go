@@ -8,6 +8,7 @@ import (
 	"uacs/internal/config"
 	"uacs/internal/controllers"
 	"uacs/internal/interfaces"
+	"uacs/internal/repo"
 	"uacs/internal/services"
 )
 
@@ -30,13 +31,17 @@ func (e *environment) InjectController() controllers.Controllers {
 		Services: &services.Services{
 			Log:    e.logger,
 			Config: e.cfg,
+			Repo: &repo.Repo{
+				Log:    e.logger,
+				Config: e.cfg,
+			},
+			DbHandler: e.dbClient,
 		},
 		Validator: validator.New(),
 	}
 }
 
 func Injector(log *zap.SugaredLogger, ctx context.Context, cfg *config.Config) (IInjector, error) {
-	log.Info("injector starting...")
 	client, err := InitMongoClient(log, cfg, ctx)
 	if err != nil {
 		return nil, err
@@ -50,6 +55,5 @@ func Injector(log *zap.SugaredLogger, ctx context.Context, cfg *config.Config) (
 		dbClient: client,
 	}
 
-	log.Info("injecting done")
 	return env, nil
 }

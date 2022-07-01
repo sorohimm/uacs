@@ -1,11 +1,9 @@
-mongo
-
-use solnyshko
+use solnyhsko;
 
 db.createUser(
         {
-            user: "root",
-            pwd: "root",
+            user: "dev",
+            pwd: "dev",
             roles: [
                 {
                     role: "readWrite",
@@ -14,3 +12,5 @@ db.createUser(
             ]
         }
 );
+
+#db.createCollection("competitions");
