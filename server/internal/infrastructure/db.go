@@ -2,60 +2,37 @@ package infrastructure
 
 import (
 	"context"
-	"fmt"
-	"github.com/jackc/pgx/v4"
+	"github.com/pkg/errors"
+	_ "go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
+	_ "go.mongodb.org/mongo-driver/mongo/readpref"
 	"go.uber.org/zap"
 	"uacs/internal/config"
 	"uacs/internal/interfaces"
-
-	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/pkg/errors"
 )
 
-type PostgresClient struct {
-	Pool *pgxpool.Pool
+type MongoClient struct {
+	Client *mongo.Client
 }
 
-func initPostgresClient(log *zap.SugaredLogger, cfg *config.Config, ctx context.Context) (interfaces.IDBHandler, error) {
-	dbPool, err := pgxpool.Connect(ctx, fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		cfg.DBUsername, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName))
+func InitMongoClient(logger *zap.SugaredLogger, cfg *config.Config, ctx context.Context) (interfaces.IDBHandler, error) {
+	clientOptions := options.Client().ApplyURI(cfg.DBAuthData.URL)
+	client, err := mongo.Connect(context.TODO(), clientOptions)
+
 	if err != nil {
-		log.Errorf("Postgres connect error: %s\n", err.Error())
-		return nil, errors.Wrap(err, "postgres init")
+		logger.Error(err.Error())
+		return &MongoClient{}, errors.Wrap(err, "mongo initialization err")
 	}
+	logger.Info("db client init ok")
 
-	return &PostgresClient{Pool: dbPool}, nil
+	return &MongoClient{Client: client}, nil
 }
 
-func (p *PostgresClient) GetPool() *pgxpool.Pool {
-	return p.Pool
+func (c *MongoClient) AcquireDatabase(name string) *mongo.Database {
+	return c.Client.Database(name)
 }
 
-func (p *PostgresClient) AcquireConn(ctx context.Context) (*pgxpool.Conn, error) {
-	return p.Pool.Acquire(ctx)
-}
-
-func (p *PostgresClient) StartTransaction(ctx context.Context) (pgx.Tx, error) {
-	tx, err := p.Pool.Begin(ctx)
-	if err != nil {
-		return nil, errors.Wrap(err, "Begin")
-	}
-
-	return tx, err
-}
-
-func (p *PostgresClient) FinishTransaction(ctx context.Context, tx pgx.Tx, err error) error {
-	if err != nil {
-		if rollbackErr := tx.Rollback(ctx); rollbackErr != nil {
-			return errors.Wrap(err, "Rollback")
-		}
-
-		return err
-	} else {
-		if commitErr := tx.Commit(ctx); commitErr != nil {
-			return errors.Wrap(err, "failed to commit tx")
-		}
-
-		return nil
-	}
+func (c *MongoClient) AcquireClient() *mongo.Client {
+	return c.Client
 }

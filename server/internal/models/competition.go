@@ -4,6 +4,7 @@ import "time"
 
 type Competition struct {
 	UUID                   string    `json:"uuid" validate:"required"`
+	CreatorUUID            string    `json:"creator_uuid" validate:"required"`
 	Code                   string    `json:"code" validate:"required"`
 	Name                   string    `json:"name" validate:"required"`
 	Description            string    `json:"description,omitempty"`
@@ -18,4 +19,14 @@ type Competition struct {
 	DateFrom               time.Time `json:"date_from" validate:"required"`
 	DateTo                 time.Time `json:"date_to" validate:"required"`
 	TimeZone               string    `json:"time_zone,omitempty"`
+	LastUpdate             string    `json:"last_update"`
+}
+
+type CompetitionShortOutput struct {
+	Code        string `json:"code,omitempty"`
+	Name        string `json:"name,omitempty"`
+	OrganizedBy string `json:"organized_by,omitempty"`
+	Location    string `json:"location,omitempty"`
+	Date        string `json:"date,omitempty"`
+	LastUpdate  string `json:"last_update,omitempty"`
 }

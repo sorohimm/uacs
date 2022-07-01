@@ -37,7 +37,7 @@ func (e *environment) InjectController() controllers.Controllers {
 
 func Injector(log *zap.SugaredLogger, ctx context.Context, cfg *config.Config) (IInjector, error) {
 	log.Info("injector starting...")
-	client, err := initPostgresClient(log, cfg, ctx)
+	client, err := InitMongoClient(log, cfg, ctx)
 	if err != nil {
 		return nil, err
 	}
