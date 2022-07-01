@@ -3,7 +3,8 @@ package config
 import "os"
 
 type Config struct {
-	Port        string
+	DevPort     string
+	ProdPort    string
 	DBAuthData  DBAuthenticationData
 	Collections Collections
 }
@@ -23,7 +24,8 @@ type Collections struct {
 
 func New() (*Config, error) {
 	return &Config{
-		Port: os.Getenv("PORT"),
+		DevPort:  os.Getenv("MAIN_SERVER_DEV_PORT"),
+		ProdPort: os.Getenv("MAIN_SERVER_PROD_PORT"),
 		DBAuthData: DBAuthenticationData{
 			Username: os.Getenv("DB_USERNAME"),
 			Password: os.Getenv("DB_PASSWORD"),

@@ -50,6 +50,6 @@ func main() {
 		v0.POST("/new_competition", controllers.NewCompetition)
 	}
 
-	log.Infof("Server launched and running on http://localhost:%s\n", cfg.Port)
-	log.Fatal(r.Run(cfg.Port))
+	log.Infof("Server launched and running on http://localhost:%s\n", cfg.DevPort)
+	log.Fatal(r.Run(cfg.DevPort))
 }
