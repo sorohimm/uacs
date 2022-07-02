@@ -5,7 +5,7 @@ import (
 	"uacs/internal/models"
 )
 
-type IRepo interface {
+type IRepoV0 interface {
 	NewCompetition(collection *mongo.Collection, competition models.Competition) error
 	GetMyCompetitionsShort(collection *mongo.Collection, userId string) ([]models.CompetitionShortOutput, error)
 	GetAllCompetitionsShort(collection *mongo.Collection) ([]models.CompetitionShortOutput, error)

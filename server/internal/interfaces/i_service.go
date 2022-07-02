@@ -2,9 +2,9 @@ package interfaces
 
 import "uacs/internal/models"
 
-type IServices interface {
+type IServicesV0 interface {
 	NewCompetition(competition models.Competition) (models.Competition, error)
-	GetMyCompetitionsShort() ([]models.CompetitionShortOutput, error)
+	GetMyCompetitionsShort(userId string) ([]models.CompetitionShortOutput, error)
 	GetAllCompetitionsShort() ([]models.CompetitionShortOutput, error)
 	GetSingleCompetitionFull() (models.Competition, error)
 }

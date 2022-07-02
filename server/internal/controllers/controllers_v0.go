@@ -11,9 +11,9 @@ import (
 )
 
 type V0Controllers struct {
-	Log       *zap.SugaredLogger
-	Services  *services.ServicesV0
-	Validator *validator.Validate
+	Log        *zap.SugaredLogger
+	ServicesV0 *services.ServicesV0
+	Validator  *validator.Validate
 }
 
 func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
@@ -26,7 +26,7 @@ func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
 		return
 	}
 
-	competition, err := c.Services.NewCompetition(newCompetition)
+	competition, err := c.ServicesV0.NewCompetition(newCompetition)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, fmt.Sprintf(`{"error": "%s"}`, err.Error()))
 		return

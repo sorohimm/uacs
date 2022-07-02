@@ -10,7 +10,7 @@ import (
 type ServicesV0 struct {
 	Log       *zap.SugaredLogger
 	Config    *config.Config
-	Repo      interfaces.IRepo
+	RepoV0    interfaces.IRepoV0
 	DbHandler interfaces.IDBHandler
 }
 
@@ -20,7 +20,7 @@ func (s *ServicesV0) NewCompetition(newCompetition models.Competition) (models.C
 
 	newCompetition.GenerateUUID()
 
-	err := s.Repo.NewCompetition(collection, newCompetition)
+	err := s.RepoV0.NewCompetition(collection, newCompetition)
 	if err != nil {
 		s.Log.Errorf("Failed create new competition. Received error: %s", err.Error())
 		return models.Competition{}, err
@@ -29,7 +29,7 @@ func (s *ServicesV0) NewCompetition(newCompetition models.Competition) (models.C
 	return newCompetition, nil
 }
 
-func (s *ServicesV0) GetMyCompetitionsShort() ([]models.CompetitionShortOutput, error) {
+func (s *ServicesV0) GetMyCompetitionsShort(userId string) ([]models.CompetitionShortOutput, error) {
 	return nil, nil
 }
 
