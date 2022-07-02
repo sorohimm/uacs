@@ -58,6 +58,14 @@ func (r *RepoV0) GetAllCompetitionsShort(collection *mongo.Collection) ([]models
 	return competitions, nil
 }
 
-func (r *RepoV0) GetSingleCompetitionFull(collection *mongo.Collection) (models.Competition, error) {
-	return models.Competition{}, nil
+func (r *RepoV0) GetSingleCompetitionFull(collection *mongo.Collection, id string) (models.Competition, error) {
+	res := collection.FindOne(context.Background(), bson.M{"uuid": id})
+
+	var competition models.Competition
+	err := res.Decode(&competition)
+	if err != nil {
+		return models.Competition{}, err
+	}
+
+	return competition, nil
 }

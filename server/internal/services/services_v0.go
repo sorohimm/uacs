@@ -46,6 +46,15 @@ func (s *ServicesV0) GetAllCompetitionsShort() ([]models.CompetitionShortOutput,
 	return competitions, nil
 }
 
-func (s *ServicesV0) GetSingleCompetitionFull() (models.Competition, error) {
-	return models.Competition{}, nil
+func (s *ServicesV0) GetSingleCompetitionFull(id string) (models.Competition, error) {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	collection := database.Collection(s.Config.Collections.Competitions)
+
+	competition, err := s.RepoV0.GetSingleCompetitionFull(collection, id)
+	if err != nil {
+		s.Log.Errorf("GetSingleCompetitionFull error: %s", err.Error())
+		return models.Competition{}, err
+	}
+
+	return competition, nil
 }

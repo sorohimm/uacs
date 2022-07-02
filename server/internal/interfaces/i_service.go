@@ -6,5 +6,5 @@ type IServicesV0 interface {
 	NewCompetition(competition models.Competition) (models.Competition, error)
 	GetMyCompetitionsShort(userId string) ([]models.CompetitionShortOutput, error)
 	GetAllCompetitionsShort() ([]models.CompetitionShortOutput, error)
-	GetSingleCompetitionFull() (models.Competition, error)
+	GetSingleCompetitionFull(id string) (models.Competition, error)
 }

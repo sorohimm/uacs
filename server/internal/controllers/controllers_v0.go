@@ -36,13 +36,13 @@ func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
 }
 
 func (c *V0Controllers) GetMyCompetitionsShort(ctx *gin.Context) {
-
+	ctx.AbortWithStatus(http.StatusNotImplemented)
 }
 
 func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
 	competitions, err := c.ServicesV0.GetAllCompetitionsShort()
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -50,5 +50,13 @@ func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
 }
 
 func (c *V0Controllers) GetSingleCompetitionFull(ctx *gin.Context) {
+	id := ctx.Query("id")
+	competition, err := c.ServicesV0.GetSingleCompetitionFull(id)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 
+		return
+	}
+
+	ctx.JSON(http.StatusOK, competition)
 }

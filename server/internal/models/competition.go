@@ -10,19 +10,19 @@ type Competition struct {
 	CreatorUUID            string    `bson:"creatorUUID" json:"creator_uuid" validate:"required"`
 	Code                   string    `bson:"code" json:"code" validate:"required"`
 	Name                   string    `bson:"name" json:"name" validate:"required"`
-	Description            string    `bson:"description" json:"description,omitempty"`
-	ShortName              string    `bson:"shortName" json:"short_name,omitempty"`
+	Description            string    `bson:"description" json:"description"`
+	ShortName              string    `bson:"shortName" json:"short_name"`
 	OrganizedBy            string    `bson:"organizedBy" json:"organized_by" validate:"required"`
-	OrganizedByDescription string    `bson:"organizedByDescription" json:"organized_by_description,omitempty"`
+	OrganizedByDescription string    `bson:"organizedByDescription" json:"organized_by_description"`
 	CompetitionRules       string    `bson:"competitionRules" json:"competition_rules" validate:"required"`
-	TormentType            string    `bson:"tormentType" json:"torment_type,omitempty"`
+	TormentType            string    `bson:"tormentType" json:"torment_type"`
 	AgeCategories          string    `bson:"ageCategories" json:"age_categories" validate:"required"`
-	Venue                  string    `bson:"venue" json:"venue,omitempty"`
+	Venue                  string    `bson:"venue" json:"venue"`
 	Country                string    `bson:"country" json:"country" validate:"omitempty"`
 	City                   string    `bson:"city" json:"city" validate:"required"`
 	DateFrom               time.Time `bson:"dateFrom" json:"date_from" validate:"required"`
 	DateTo                 time.Time `bson:"dateTo" json:"date_to" validate:"required"`
-	TimeZone               string    `bson:"timeZone" json:"time_zone,omitempty"`
+	TimeZone               string    `bson:"timeZone" json:"time_zone"`
 	LastUpdate             string    `bson:"lastUpdate" json:"last_update"`
 }
 
