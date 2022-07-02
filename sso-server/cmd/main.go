@@ -43,7 +43,8 @@ func main() {
 
 	r := gin.Default()
 
-	r.GET("/registration", controllers.Registration)
+	r.POST("/registration", controllers.Registration)
+	r.POST("/login", controllers.Login)
 
 	log.Infof("Sso server launched and running on http://localhost:%s", cfg.SsoServerDevPort)
 

@@ -18,16 +18,16 @@ type Controllers struct {
 }
 
 func (c *Controllers) Registration(ctx *gin.Context) {
-	token, err := c.KeyloackClient.LoginAdmin(context.Background(), c.Cfg.KeycloakAdminUsername, c.Cfg.KeycloakAdminPassword, "realmName")
+	var newUser models.User
+	err := ctx.BindJSON(&newUser)
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	var newUser models.User
-	err = ctx.BindJSON(&newUser)
+	token, err := c.KeyloackClient.LoginAdmin(context.Background(), c.Cfg.KeycloakAdminUsername, c.Cfg.KeycloakAdminPassword, c.Cfg.KeycloakRealmName)
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -39,7 +39,7 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		Username:  gocloak.StringP(newUser.Username),
 	}
 
-	usrId, err := c.KeyloackClient.CreateUser(context.Background(), token.AccessToken, "realm", user)
+	usrId, err := c.KeyloackClient.CreateUser(context.Background(), token.AccessToken, c.Cfg.KeycloakRealmName, user)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -51,11 +51,41 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		return
 	}
 
-	err = c.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, "master", string(hashPwd), false)
+	err = c.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, c.Cfg.KeycloakRealmName, string(hashPwd), false)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	ctx.JSON(http.StatusCreated, "")
+}
+
+func (c *Controllers) Login(ctx *gin.Context) {
+	var loginReq models.LoginRequest
+
+	err := ctx.BindJSON(&loginReq)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	jwt, err := c.KeyloackClient.Login(context.Background(),
+		c.Cfg.KeycloakClientId,
+		c.Cfg.KeycloakClientSecret,
+		c.Cfg.KeycloakRealmName,
+		loginReq.Username,
+		loginReq.Password,
+	)
+	if err != nil {
+		ctx.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	resp := models.LoginResponse{
+		AccessToken:  jwt.AccessToken,
+		RefreshToken: jwt.RefreshToken,
+		ExpiresIn:    jwt.ExpiresIn,
+	}
+
+	ctx.JSON(http.StatusOK, resp)
 }
