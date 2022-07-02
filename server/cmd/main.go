@@ -43,14 +43,17 @@ func main() {
 		log.Fatalf("Ijection fatal error: %s\n", err.Error())
 	}
 
-	controllers := injector.InjectController()
+	controllersV0 := injector.InjectV0Controllers()
 
 	gin.SetMode(gin.DebugMode)
 
 	r := gin.Default()
 	v0 := r.Group("/v0")
 	{
-		v0.POST("/new_competition", controllers.NewCompetition)
+		v0.POST("/new_competition", controllersV0.NewCompetition)
+		v0.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
+		v0.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
+		v0.GET("/competition", controllersV0.GetSingleCompetitionFull)
 	}
 
 	go healthCheck(log)

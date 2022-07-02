@@ -10,13 +10,13 @@ import (
 	"uacs/internal/services"
 )
 
-type Controllers struct {
+type V0Controllers struct {
 	Log       *zap.SugaredLogger
 	Services  *services.Services
 	Validator *validator.Validate
 }
 
-func (c *Controllers) NewCompetition(ctx *gin.Context) {
+func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
 	var newCompetition models.Competition
 
 	err := ctx.BindJSON(&newCompetition)
@@ -33,4 +33,16 @@ func (c *Controllers) NewCompetition(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, competition)
+}
+
+func (c *V0Controllers) GetMyCompetitionsShort(ctx *gin.Context) {
+
+}
+
+func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
+
+}
+
+func (c *V0Controllers) GetSingleCompetitionFull(ctx *gin.Context) {
+
 }
