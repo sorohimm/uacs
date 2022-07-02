@@ -31,10 +31,10 @@ func (c *Competition) GenerateUUID() {
 }
 
 type CompetitionShortOutput struct {
-	Code        string `json:"code,omitempty"`
-	Name        string `json:"name,omitempty"`
-	OrganizedBy string `json:"organized_by,omitempty"`
-	Location    string `json:"location,omitempty"`
-	Date        string `json:"date,omitempty"`
-	LastUpdate  string `json:"last_update,omitempty"`
+	Code        string `bson:"code" json:"code,omitempty"`
+	Name        string `bson:"name" json:"name,omitempty"`
+	OrganizedBy string `bson:"organizedBy" json:"organized_by,omitempty"`
+	Location    string `bson:"location" json:"location,omitempty"`
+	Date        string `bson:"date" json:"date,omitempty"`
+	LastUpdate  string `bson:"lastUpdate" json:"last_update,omitempty"`
 }

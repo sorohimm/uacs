@@ -40,7 +40,13 @@ func (c *V0Controllers) GetMyCompetitionsShort(ctx *gin.Context) {
 }
 
 func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
+	competitions, err := c.ServicesV0.GetAllCompetitionsShort()
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
+	ctx.JSON(http.StatusOK, competitions)
 }
 
 func (c *V0Controllers) GetSingleCompetitionFull(ctx *gin.Context) {
