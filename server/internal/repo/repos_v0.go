@@ -29,13 +29,15 @@ func (r *RepoV0) GetMyCompetitionsShort(collection *mongo.Collection, userId str
 }
 
 func (r *RepoV0) GetAllCompetitionsShort(collection *mongo.Collection) ([]models.CompetitionShortOutput, error) {
-	projection := bson.M{"description": 0,
+	projection := bson.M{
+		"description":            0,
 		"organizedByDescription": 0,
 		"competitionRules":       0,
 		"tormentType":            0,
 		"ageCategories":          0,
 		"venue":                  0,
-		"timeZone":               0}
+		"timeZone":               0,
+	}
 
 	opt := options.Find().SetProjection(projection)
 

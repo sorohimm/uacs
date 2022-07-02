@@ -65,6 +65,6 @@ func main() {
 func healthCheck(log *zap.SugaredLogger) {
 	for {
 		time.Sleep(time.Minute)
-		log.Info("Health check: I`m OK :)")
+		log.Info("Health check: I`m fine :)")
 	}
 }
