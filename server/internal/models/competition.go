@@ -18,7 +18,8 @@ type Competition struct {
 	TormentType            string    `bson:"tormentType" json:"torment_type,omitempty"`
 	AgeCategories          string    `bson:"ageCategories" json:"age_categories" validate:"required"`
 	Venue                  string    `bson:"venue" json:"venue,omitempty"`
-	Country                string    `bson:"country" json:"country" validate:"required"`
+	Country                string    `bson:"country" json:"country" validate:"omitempty"`
+	City                   string    `bson:"city" json:"city" validate:"required"`
 	DateFrom               time.Time `bson:"dateFrom" json:"date_from" validate:"required"`
 	DateTo                 time.Time `bson:"dateTo" json:"date_to" validate:"required"`
 	TimeZone               string    `bson:"timeZone" json:"time_zone,omitempty"`

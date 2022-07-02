@@ -21,3 +21,15 @@ func (r *Repo) NewCompetition(collection *mongo.Collection, newCompetition model
 
 	return nil
 }
+
+func (r *Repo) GetMyCompetitionsShort(collection *mongo.Collection, userId string) ([]models.CompetitionShortOutput, error) {
+	return nil, nil
+}
+
+func (r *Repo) GetAllCompetitionsShort(collection *mongo.Collection) ([]models.CompetitionShortOutput, error) {
+	return nil, nil
+}
+
+func (r *Repo) GetSingleCompetitionFull(collection *mongo.Collection) (models.Competition, error) {
+	return models.Competition{}, nil
+}

@@ -12,7 +12,7 @@ import (
 
 type V0Controllers struct {
 	Log       *zap.SugaredLogger
-	Services  *services.Services
+	Services  *services.ServicesV0
 	Validator *validator.Validate
 }
 

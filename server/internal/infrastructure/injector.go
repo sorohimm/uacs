@@ -28,7 +28,7 @@ type environment struct {
 func (e *environment) InjectV0Controllers() controllers.V0Controllers {
 	return controllers.V0Controllers{
 		Log: e.logger,
-		Services: &services.Services{
+		Services: &services.ServicesV0{
 			Log:    e.logger,
 			Config: e.cfg,
 			Repo: &repo.Repo{
