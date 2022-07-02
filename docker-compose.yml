@@ -1,18 +1,18 @@
 version: "3.9"
 
 services:
-  app:
-    container_name: server
-    build:
-      context: ./server
-      dockerfile: ./Dockerfile
-    env_file:
-      - ./db_deployments/db_config.env
-    ports:
-      - ${MAIN_SERVER_DEV_PORT:-8001}:8080
-    networks:
-      - network
-    restart: always
+#  app:
+#    container_name: server
+#    build:
+#      context: ./server
+#      dockerfile: ./Dockerfile
+#    env_file:
+#      - ./db_deployments/db_config.env
+#    ports:
+#      - ${MAIN_SERVER_DEV_PORT:-8080}:8080
+#    networks:
+#      - network
+#    restart: always
 
   mongo:
     image: mongo:latest
@@ -31,25 +31,25 @@ services:
     volumes:
       - ./db_deployments/db-init.js:/docker-entrypoint-initdb.d/db-init.js:ro
 
-  adminer:
-    image: mongo-express
-    container_name: mongo-adminer
-    restart: always
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
-      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
-      - ME_CONFIG_MONGODB_AUTH_USERNAME=${DB_ROOT_USERNAME}
-      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${DB_ROOT_PASSWORD}
-      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
-      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
-    ports:
-      - '8081:8081'
-    networks:
-      - network
-    depends_on:
-      - mongo
+#  adminer:
+#    image: mongo-express
+#    container_name: mongo-express
+#    restart: always
+#    environment:
+#      - ME_CONFIG_MONGODB_SERVER=mongo
+#      - ME_CONFIG_MONGODB_PORT=27017
+#      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+#      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+#      - ME_CONFIG_MONGODB_AUTH_USERNAME=${DB_ROOT_USERNAME}
+#      - ME_CONFIG_MONGODB_AUTH_PASSWORD=${DB_ROOT_PASSWORD}
+#      - ME_CONFIG_BASICAUTH_USERNAME=${MONGOEXPRESS_LOGIN}
+#      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGOEXPRESS_PASSWORD}
+#    ports:
+#      - '8081:8081'
+#    networks:
+#      - network
+#    depends_on:
+#      - mongo
 
 networks:
   network:

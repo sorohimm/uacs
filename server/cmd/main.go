@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"os"
+	"time"
 	"uacs/internal/config"
 	"uacs/internal/infrastructure"
 
@@ -52,6 +53,15 @@ func main() {
 		v0.POST("/new_competition", controllers.NewCompetition)
 	}
 
+	go healthCheck(log)
+
 	log.Infof("Server launched and running on http://localhost:%s\n", cfg.DevPort)
 	log.Fatal(r.Run(":" + cfg.DevPort))
+}
+
+func healthCheck(log *zap.SugaredLogger) {
+	for {
+		time.Sleep(time.Minute)
+		log.Info("Health check: I`m OK :)")
+	}
 }
