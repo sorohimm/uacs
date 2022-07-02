@@ -1,5 +1,3 @@
-use solnyhsko;
-
 db.createUser(
         {
             user: "dev",
@@ -13,4 +11,4 @@ db.createUser(
         }
 );
 
-#db.createCollection("competitions");
+//db.createCollection("competitions");

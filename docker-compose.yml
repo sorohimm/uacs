@@ -1,12 +1,25 @@
 version: "3.9"
 
 services:
+  app:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./db_deployments/db_config.env
+    ports:
+      - ${MAIN_SERVER_DEV_PORT:-8001}:8080
+    networks:
+      - network
+    restart: always
+
   mongo:
     image: mongo:latest
     container_name: mongodb
     restart: always
     env_file:
-      - db_config.env
+      - ./db_deployments/db_config.env
     ports:
       - ${DB_PORT:-27017}:27017
     networks:
@@ -16,7 +29,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-admin}
       MONGO_INITDB_DATABASE: ${DB_NAME:-solnyshko}
     volumes:
-      - ./db-init.js:/docker-entrypoint-initdb.d/db-init.js:ro
+      - ./db_deployments/db-init.js:/docker-entrypoint-initdb.d/db-init.js:ro
 
   adminer:
     image: mongo-express
