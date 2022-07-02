@@ -5,3 +5,29 @@ volumes:
     driver: local
 
 services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_KEYCLOAK_DB-keycloak}
+      POSTGRES_USER: ${POSTGRES_USERNAME-keycloak}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD-password}
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    env_file:
+      - ../config.env
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: ${POSTGRES_KEYCLOAK_DB-keycloak}
+      DB_USER: ${POSTGRES_USERNAME-keycloak}
+      DB_SCHEMA: public
+      DB_PASSWORD: ${POSTGRES_PASSWORD-password}
+      KEYCLOAK_USER: ${KEYCLOAK_ADMIN_USERNAME-admin}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD-Pa55w0rd}
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - ${KEYCLOAK_PORT-2104}:${KEYCLOAK_PORT-2104}
+    depends_on:
+      - postgres

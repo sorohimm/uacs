@@ -69,12 +69,18 @@ func (c *Controllers) Login(ctx *gin.Context) {
 		return
 	}
 
+	hashPwd, err := bcrypt.GenerateFromPassword([]byte(loginReq.Password), bcrypt.DefaultCost)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
 	jwt, err := c.KeyloackClient.Login(context.Background(),
 		c.Cfg.KeycloakClientId,
 		c.Cfg.KeycloakClientSecret,
 		c.Cfg.KeycloakRealmName,
 		loginReq.Username,
-		loginReq.Password,
+		string(hashPwd),
 	)
 	if err != nil {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
