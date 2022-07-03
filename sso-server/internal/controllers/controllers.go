@@ -29,7 +29,7 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, "")
+	ctx.Status(http.StatusCreated)
 }
 
 func (c *Controllers) Login(ctx *gin.Context) {
@@ -47,4 +47,22 @@ func (c *Controllers) Login(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, loginResp)
+}
+
+func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
+	var session models.LoginResponse
+
+	err := ctx.BindJSON(&session)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	ok, err := c.Services.ValidateAccessToken(session.AccessToken)
+	if err != nil || ok {
+		ctx.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }

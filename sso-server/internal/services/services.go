@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha256"
 	"github.com/Nerzal/gocloak/v11"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"uacs/sso-server/internal/config"
 	"uacs/sso-server/internal/models"
@@ -65,4 +66,17 @@ func (s *Services) Login(loginReq models.LoginRequest) (models.LoginResponse, er
 	}
 
 	return resp, nil
+}
+
+func (s *Services) ValidateAccessToken(token string) (bool, error) {
+	rptResult, err := s.KeyloackClient.RetrospectToken(context.Background(), token, s.Cfg.KeycloakClientId, s.Cfg.KeycloakClientSecret, s.Cfg.KeycloakRealmName)
+	if err != nil {
+		return false, err
+	}
+
+	if rptResult.Active == nil {
+		return false, errors.New("token is not active")
+	}
+
+	return true, nil
 }
