@@ -49,6 +49,24 @@ func (c *Controllers) Login(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, loginResp)
 }
 
+func (c *Controllers) Logout(ctx *gin.Context) {
+	var session models.Session
+
+	err := ctx.BindJSON(&session)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	err = c.Services.Logout(session)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}
+
 func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
 	var session models.Session
 

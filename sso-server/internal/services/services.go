@@ -69,6 +69,10 @@ func (s *Services) Login(loginReq models.LoginRequest) (models.Session, error) {
 	return resp, nil
 }
 
+func (s *Services) Logout(session models.Session) error {
+	return s.KeyloackClient.Logout(context.Background(), s.Cfg.KeycloakClientId, s.Cfg.KeycloakClientSecret, s.Cfg.KeycloakRealmName, session.RefreshToken)
+}
+
 func (s *Services) ValidateAccessToken(session models.Session) (bool, error) {
 	rptResult, err := s.KeyloackClient.RetrospectToken(context.Background(), session.AccessToken, s.Cfg.KeycloakClientId, s.Cfg.KeycloakClientSecret, s.Cfg.KeycloakRealmName)
 	if err != nil {
