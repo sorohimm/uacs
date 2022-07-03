@@ -10,13 +10,13 @@ import (
 	"uacs/internal/services"
 )
 
-type V0Controllers struct {
+type ControllersV0 struct {
 	Log        *zap.SugaredLogger
 	ServicesV0 *services.ServicesV0
 	Validator  *validator.Validate
 }
 
-func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
+func (c *ControllersV0) NewCompetition(ctx *gin.Context) {
 	var newCompetition models.Competition
 
 	err := ctx.BindJSON(&newCompetition)
@@ -35,11 +35,11 @@ func (c *V0Controllers) NewCompetition(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, competition)
 }
 
-func (c *V0Controllers) GetMyCompetitionsShort(ctx *gin.Context) {
+func (c *ControllersV0) GetMyCompetitionsShort(ctx *gin.Context) {
 	ctx.AbortWithStatus(http.StatusNotImplemented)
 }
 
-func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
+func (c *ControllersV0) GetAllCompetitionsShort(ctx *gin.Context) {
 	competitions, err := c.ServicesV0.GetAllCompetitionsShort()
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
@@ -49,7 +49,7 @@ func (c *V0Controllers) GetAllCompetitionsShort(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, competitions)
 }
 
-func (c *V0Controllers) GetSingleCompetitionFull(ctx *gin.Context) {
+func (c *ControllersV0) GetSingleCompetitionFull(ctx *gin.Context) {
 	id := ctx.Query("id")
 	competition, err := c.ServicesV0.GetSingleCompetitionFull(id)
 	if err != nil {

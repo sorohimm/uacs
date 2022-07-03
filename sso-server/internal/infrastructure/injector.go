@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"uacs/sso-server/internal/config"
 	"uacs/sso-server/internal/controllers"
+	"uacs/sso-server/internal/services"
 )
 
 type IInjector interface {
@@ -22,9 +23,13 @@ type environment struct {
 
 func (e *environment) InjectControllers() controllers.Controllers {
 	return controllers.Controllers{
-		Log:            e.logger,
-		KeyloackClient: e.keycloakClient,
-		Cfg:            e.config,
+		Log: e.logger,
+		Cfg: e.config,
+		Services: &services.Services{
+			Log:            e.logger,
+			Cfg:            e.config,
+			KeyloackClient: e.keycloakClient,
+		},
 	}
 }
 

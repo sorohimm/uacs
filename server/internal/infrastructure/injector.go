@@ -13,7 +13,7 @@ import (
 )
 
 type IInjector interface {
-	InjectV0Controllers() controllers.V0Controllers
+	InjectV0Controllers() controllers.ControllersV0
 }
 
 var env *environment
@@ -25,8 +25,8 @@ type environment struct {
 	dbClient interfaces.IDBHandler
 }
 
-func (e *environment) InjectV0Controllers() controllers.V0Controllers {
-	return controllers.V0Controllers{
+func (e *environment) InjectV0Controllers() controllers.ControllersV0 {
+	return controllers.ControllersV0{
 		Log: e.logger,
 		ServicesV0: &services.ServicesV0{
 			Log:    e.logger,

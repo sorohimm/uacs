@@ -1,20 +1,18 @@
 package controllers
 
 import (
-	"context"
-	"crypto/sha256"
-	"github.com/Nerzal/gocloak/v11"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
 	"uacs/sso-server/internal/config"
 	"uacs/sso-server/internal/models"
+	"uacs/sso-server/internal/services"
 )
 
 type Controllers struct {
-	Log            *zap.SugaredLogger
-	KeyloackClient gocloak.GoCloak
-	Cfg            *config.Config
+	Log      *zap.SugaredLogger
+	Cfg      *config.Config
+	Services *services.Services
 }
 
 func (c *Controllers) Registration(ctx *gin.Context) {
@@ -25,31 +23,9 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		return
 	}
 
-	token, err := c.KeyloackClient.LoginAdmin(context.Background(), c.Cfg.KeycloakAdminUsername, c.Cfg.KeycloakAdminPassword, "master")
+	err = c.Services.Registration(newUser)
 	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	user := gocloak.User{
-		FirstName: gocloak.StringP(newUser.FirstName),
-		LastName:  gocloak.StringP(newUser.LastName),
-		Email:     gocloak.StringP(newUser.Email),
-		Enabled:   gocloak.BoolP(true),
-		Username:  gocloak.StringP(newUser.Username),
-	}
-
-	usrId, err := c.KeyloackClient.CreateUser(context.Background(), token.AccessToken, c.Cfg.KeycloakRealmName, user)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
-
-	bytePwd := sha256.Sum256([]byte(newUser.Password))
-
-	err = c.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, c.Cfg.KeycloakRealmName, string(bytePwd[:]), false)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
+		ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
 
@@ -65,25 +41,10 @@ func (c *Controllers) Login(ctx *gin.Context) {
 		return
 	}
 
-	bytePwd := sha256.Sum256([]byte(loginReq.Password))
-
-	jwt, err := c.KeyloackClient.Login(context.Background(),
-		c.Cfg.KeycloakClientId,
-		c.Cfg.KeycloakClientSecret,
-		c.Cfg.KeycloakRealmName,
-		loginReq.Username,
-		string(bytePwd[:]),
-	)
+	loginResp, err := c.Services.Login(loginReq)
 	if err != nil {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
-
-	resp := models.LoginResponse{
-		AccessToken:  jwt.AccessToken,
-		RefreshToken: jwt.RefreshToken,
-		ExpiresIn:    jwt.ExpiresIn,
-	}
-
-	ctx.JSON(http.StatusOK, resp)
+	ctx.JSON(http.StatusOK, loginResp)
 }
