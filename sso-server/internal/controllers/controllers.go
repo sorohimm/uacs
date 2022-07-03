@@ -50,7 +50,7 @@ func (c *Controllers) Login(ctx *gin.Context) {
 }
 
 func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
-	var session models.LoginResponse
+	var session models.Session
 
 	err := ctx.BindJSON(&session)
 	if err != nil {
@@ -58,11 +58,29 @@ func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
 		return
 	}
 
-	ok, err := c.Services.ValidateAccessToken(session.AccessToken)
+	ok, err := c.Services.ValidateAccessToken(session)
 	if err != nil || !ok {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
 
 	ctx.Status(http.StatusOK)
+}
+
+func (c *Controllers) GetUserId(ctx *gin.Context) {
+	var session models.Session
+
+	err := ctx.BindJSON(&session)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	userId, err := c.Services.GetUserId(session)
+	if err != nil {
+		ctx.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"id": userId})
 }

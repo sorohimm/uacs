@@ -45,7 +45,7 @@ func (s *Services) Registration(newUser models.User) error {
 	return nil
 }
 
-func (s *Services) Login(loginReq models.LoginRequest) (models.LoginResponse, error) {
+func (s *Services) Login(loginReq models.LoginRequest) (models.Session, error) {
 	bytePwd := sha256.Sum256([]byte(loginReq.Password))
 
 	jwt, err := s.KeyloackClient.Login(context.Background(),
@@ -56,10 +56,10 @@ func (s *Services) Login(loginReq models.LoginRequest) (models.LoginResponse, er
 		string(bytePwd[:]),
 	)
 	if err != nil {
-		return models.LoginResponse{}, err
+		return models.Session{}, err
 	}
 
-	resp := models.LoginResponse{
+	resp := models.Session{
 		AccessToken:  jwt.AccessToken,
 		RefreshToken: jwt.RefreshToken,
 		ExpiresIn:    jwt.ExpiresIn,
@@ -68,8 +68,8 @@ func (s *Services) Login(loginReq models.LoginRequest) (models.LoginResponse, er
 	return resp, nil
 }
 
-func (s *Services) ValidateAccessToken(token string) (bool, error) {
-	rptResult, err := s.KeyloackClient.RetrospectToken(context.Background(), token, s.Cfg.KeycloakClientId, s.Cfg.KeycloakClientSecret, s.Cfg.KeycloakRealmName)
+func (s *Services) ValidateAccessToken(session models.Session) (bool, error) {
+	rptResult, err := s.KeyloackClient.RetrospectToken(context.Background(), session.AccessToken, s.Cfg.KeycloakClientId, s.Cfg.KeycloakClientSecret, s.Cfg.KeycloakRealmName)
 	if err != nil {
 		return false, err
 	}
@@ -79,4 +79,13 @@ func (s *Services) ValidateAccessToken(token string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func (s *Services) GetUserId(session models.Session) (string, error) {
+	userInfo, err := s.KeyloackClient.GetUserInfo(context.Background(), session.AccessToken, s.Cfg.KeycloakRealmName)
+	if err != nil || userInfo.Sub == nil {
+		return "", err
+	}
+
+	return *userInfo.Sub, nil
 }
