@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"context"
+	"crypto/sha256"
 	"github.com/Nerzal/gocloak/v11"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"uacs/sso-server/internal/config"
 	"uacs/sso-server/internal/models"
@@ -25,7 +25,7 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		return
 	}
 
-	token, err := c.KeyloackClient.LoginAdmin(context.Background(), c.Cfg.KeycloakAdminUsername, c.Cfg.KeycloakAdminPassword, c.Cfg.KeycloakRealmName)
+	token, err := c.KeyloackClient.LoginAdmin(context.Background(), c.Cfg.KeycloakAdminUsername, c.Cfg.KeycloakAdminPassword, "master")
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -45,13 +45,9 @@ func (c *Controllers) Registration(ctx *gin.Context) {
 		return
 	}
 
-	hashPwd, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), bcrypt.DefaultCost)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
+	bytePwd := sha256.Sum256([]byte(newUser.Password))
 
-	err = c.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, c.Cfg.KeycloakRealmName, string(hashPwd), false)
+	err = c.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, c.Cfg.KeycloakRealmName, string(bytePwd[:]), false)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
 		return
@@ -69,18 +65,14 @@ func (c *Controllers) Login(ctx *gin.Context) {
 		return
 	}
 
-	hashPwd, err := bcrypt.GenerateFromPassword([]byte(loginReq.Password), bcrypt.DefaultCost)
-	if err != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, err)
-		return
-	}
+	bytePwd := sha256.Sum256([]byte(loginReq.Password))
 
 	jwt, err := c.KeyloackClient.Login(context.Background(),
 		c.Cfg.KeycloakClientId,
 		c.Cfg.KeycloakClientSecret,
 		c.Cfg.KeycloakRealmName,
 		loginReq.Username,
-		string(hashPwd),
+		string(bytePwd[:]),
 	)
 	if err != nil {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
