@@ -2,18 +2,19 @@ package services
 
 import (
 	"context"
-	"crypto/sha256"
 	"github.com/Nerzal/gocloak/v11"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"uacs/sso-server/internal/config"
 	"uacs/sso-server/internal/models"
+	"uacs/sso-server/internal/security"
 )
 
 type Services struct {
 	Log            *zap.SugaredLogger
 	Cfg            *config.Config
 	KeyloackClient gocloak.GoCloak
+	Security       security.Security
 }
 
 func (s *Services) Registration(newUser models.User) error {
@@ -35,9 +36,9 @@ func (s *Services) Registration(newUser models.User) error {
 		return err
 	}
 
-	bytePwd := sha256.Sum256([]byte(newUser.Password))
+	hashPwd := s.Security.HashPassword(newUser.Password)
 
-	err = s.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, s.Cfg.KeycloakRealmName, string(bytePwd[:]), false)
+	err = s.KeyloackClient.SetPassword(context.Background(), token.AccessToken, usrId, s.Cfg.KeycloakRealmName, hashPwd, false)
 	if err != nil {
 		return err
 	}
@@ -46,14 +47,14 @@ func (s *Services) Registration(newUser models.User) error {
 }
 
 func (s *Services) Login(loginReq models.LoginRequest) (models.Session, error) {
-	bytePwd := sha256.Sum256([]byte(loginReq.Password))
+	hashPwd := s.Security.HashPassword(loginReq.Password)
 
 	jwt, err := s.KeyloackClient.Login(context.Background(),
 		s.Cfg.KeycloakClientId,
 		s.Cfg.KeycloakClientSecret,
 		s.Cfg.KeycloakRealmName,
 		loginReq.Username,
-		string(bytePwd[:]),
+		hashPwd,
 	)
 	if err != nil {
 		return models.Session{}, err
