@@ -59,7 +59,7 @@ func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
 	}
 
 	ok, err := c.Services.ValidateAccessToken(session.AccessToken)
-	if err != nil || ok {
+	if err != nil || !ok {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}

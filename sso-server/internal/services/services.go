@@ -74,7 +74,7 @@ func (s *Services) ValidateAccessToken(token string) (bool, error) {
 		return false, err
 	}
 
-	if rptResult.Active == nil {
+	if !*rptResult.Active {
 		return false, errors.New("token is not active")
 	}
 
