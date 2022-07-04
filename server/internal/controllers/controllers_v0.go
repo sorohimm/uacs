@@ -19,7 +19,7 @@ type ControllersV0 struct {
 func (c *ControllersV0) NewCompetition(ctx *gin.Context) {
 	var newCompetition models.Competition
 
-	err := json.NewDecoder(ctx.Request.Body).Decode(&newCompetition) //err := ctx.BindJSON(&newCompetition)
+	err := json.NewDecoder(ctx.Request.Body).Decode(&newCompetition)
 	if err != nil {
 		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
 		ctx.Status(http.StatusBadRequest)
@@ -54,7 +54,6 @@ func (c *ControllersV0) GetSingleCompetitionFull(ctx *gin.Context) {
 	competition, err := c.ServicesV0.GetSingleCompetitionFull(id)
 	if err != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, err)
-
 		return
 	}
 
@@ -62,25 +61,99 @@ func (c *ControllersV0) GetSingleCompetitionFull(ctx *gin.Context) {
 }
 
 func (c *ControllersV0) AddParticipant(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	var newParticipant models.CompetitionParticipant
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&newParticipant)
+	if err != nil {
+		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	participant, err := c.ServicesV0.AddParticipant(newParticipant)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, participant)
 }
 
 func (c *ControllersV0) AddJudge(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	var newJudge models.CompetitionJudge
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&newJudge)
+	if err != nil {
+		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	judge, err := c.ServicesV0.AddJudge(newJudge)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, judge)
 }
 
 func (c *ControllersV0) DeleteParticipant(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	id := ctx.Query("id")
+	err := c.ServicesV0.DeleteParticipant(id)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }
 
 func (c *ControllersV0) DeleteJudge(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	id := ctx.Query("id")
+	err := c.ServicesV0.DeleteJudge(id)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }
 
 func (c *ControllersV0) UpdateParticipant(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	var updateParticipant models.CompetitionParticipant
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&updateParticipant)
+	if err != nil {
+		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	participant, err := c.ServicesV0.UpdateParticipant(updateParticipant)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, participant)
 }
 
 func (c *ControllersV0) UpdateJudge(ctx *gin.Context) {
-	ctx.Status(http.StatusNotImplemented)
+	var updateJudge models.CompetitionJudge
+
+	err := json.NewDecoder(ctx.Request.Body).Decode(&updateJudge)
+	if err != nil {
+		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
+		ctx.Status(http.StatusBadRequest)
+		return
+	}
+
+	participant, err := c.ServicesV0.UpdateJudge(updateJudge)
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, participant)
 }
