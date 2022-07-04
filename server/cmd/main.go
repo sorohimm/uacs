@@ -42,8 +42,8 @@ func main() {
 		log.Fatalf("Ijection fatal error: %s\n", err.Error())
 	}
 
-	controllersV0 := injector.InjectV0Controllers()
-	middlewareV0 := injector.InjectV0Middleware()
+	controllersV0 := injector.InjectControllersV0()
+	middlewareV0 := injector.InjectMiddlewareV0()
 	gin.SetMode(gin.DebugMode)
 
 	r := gin.Default()
