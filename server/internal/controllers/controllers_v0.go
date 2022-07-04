@@ -60,3 +60,27 @@ func (c *ControllersV0) GetSingleCompetitionFull(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, competition)
 }
+
+func (c *ControllersV0) AddParticipant(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}
+
+func (c *ControllersV0) AddJudge(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}
+
+func (c *ControllersV0) DeleteParticipant(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}
+
+func (c *ControllersV0) DeleteJudge(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}
+
+func (c *ControllersV0) UpdateParticipant(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}
+
+func (c *ControllersV0) UpdateJudge(ctx *gin.Context) {
+	ctx.Status(http.StatusNotImplemented)
+}

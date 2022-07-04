@@ -54,6 +54,24 @@ func main() {
 	authorized := r.Group("/with_auth")
 	authorized.Use(middlewareV0.AuthRequired)
 	{
+		add := authorized.Group("/add")
+		{
+			add.POST("/participant", controllersV0.AddParticipant)
+			add.POST("/judge", controllersV0.AddJudge)
+		}
+
+		del := authorized.Group("/delete")
+		{
+			del.DELETE("/participant", controllersV0.DeleteParticipant)
+			del.DELETE("/judge", controllersV0.DeleteJudge)
+		}
+
+		upd := authorized.Group("/update")
+		{
+			upd.PATCH("/participant", controllersV0.UpdateParticipant)
+			upd.PATCH("/judge", controllersV0.UpdateJudge)
+		}
+
 		authorized.POST("/new_competition", controllersV0.NewCompetition)
 		authorized.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
 	}

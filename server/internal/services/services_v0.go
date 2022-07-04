@@ -58,3 +58,27 @@ func (s *ServicesV0) GetSingleCompetitionFull(id string) (models.Competition, er
 
 	return competition, nil
 }
+
+func (s *ServicesV0) AddParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
+	return models.CompetitionParticipant{}, nil
+}
+
+func (s *ServicesV0) AddJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
+	return models.CompetitionJudge{}, nil
+}
+
+func (s *ServicesV0) DeleteParticipant(id string) error {
+	return nil
+}
+
+func (s *ServicesV0) DeleteJudge(id string) error {
+	return nil
+}
+
+func (s *ServicesV0) UpdateParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
+	return models.CompetitionParticipant{}, nil
+}
+
+func (s *ServicesV0) UpdateJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
+	return models.CompetitionJudge{}, nil
+}
