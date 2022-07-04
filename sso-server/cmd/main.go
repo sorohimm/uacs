@@ -45,7 +45,7 @@ func main() {
 
 	r.POST("/registration", controllers.Registration)
 	r.POST("/login", controllers.Login)
-	r.GET("/is_valid", controllers.ValidateAccessToken)
+	r.GET("/is_valid_token", controllers.ValidateAccessToken)
 	r.GET("/user_id", controllers.GetUserId)
 
 	log.Infof("Sso server launched and running on http://localhost:%s", cfg.SsoServerDevPort)

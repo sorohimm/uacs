@@ -46,17 +46,22 @@ func (c *Controllers) Login(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusUnauthorized, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, loginResp)
+
+	ctx.SetCookie("accessToken", loginResp.AccessToken, loginResp.ExpiresIn, "", "", true, true)
+	ctx.SetCookie("refreshToken", loginResp.RefreshToken, loginResp.ExpiresIn, "", "", true, true)
+	ctx.Status(http.StatusOK)
 }
 
 func (c *Controllers) Logout(ctx *gin.Context) {
 	var session models.Session
 
-	err := ctx.BindJSON(&session)
+	cookie, err := ctx.Cookie("refreshToken")
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
+	session.RefreshToken = cookie
 
 	err = c.Services.Logout(session)
 	if err != nil {
@@ -70,11 +75,13 @@ func (c *Controllers) Logout(ctx *gin.Context) {
 func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
 	var session models.Session
 
-	err := ctx.BindJSON(&session)
+	cookie, err := ctx.Cookie("accessToken")
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
+	session.AccessToken = cookie
 
 	ok, err := c.Services.ValidateAccessToken(session)
 	if err != nil || !ok {
@@ -88,11 +95,13 @@ func (c *Controllers) ValidateAccessToken(ctx *gin.Context) {
 func (c *Controllers) GetUserId(ctx *gin.Context) {
 	var session models.Session
 
-	err := ctx.BindJSON(&session)
+	cookie, err := ctx.Cookie("accessToken")
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
+	session.AccessToken = cookie
 
 	userId, err := c.Services.GetUserId(session)
 	if err != nil {
