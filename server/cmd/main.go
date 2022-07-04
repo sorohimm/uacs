@@ -55,24 +55,42 @@ func main() {
 	authorized.Use(middlewareV0.AuthRequired)
 	{
 		edit := authorized.Group("/edit")
-		edit.Use()
 		{
-			add := edit.Group("/add")
+			stuff := edit.Group("/stuff")
+			// TODO: add "check stuff edit rights" middleware
 			{
-				add.POST("/participant", controllersV0.AddParticipant)
-				add.POST("/judge", controllersV0.AddJudge)
+				add := stuff.Group("/add")
+				{
+					// /with_auth/edit/stuff/add/participant
+					add.POST("/participant", controllersV0.AddParticipant)
+					// /with_auth/edit/stuff/add/judge
+					add.POST("/judge", controllersV0.AddJudge)
+				}
+
+				del := stuff.Group("/delete")
+				{
+					// /with_auth/edit/stuff/delete/participant
+					del.DELETE("/participant", controllersV0.DeleteParticipant)
+					// /with_auth/edit/stuff/delete/judge
+					del.DELETE("/judge", controllersV0.DeleteJudge)
+				}
+
+				upd := stuff.Group("/update")
+				{
+					// /with_auth/edit/stuff/update/participant
+					upd.PATCH("/participant", controllersV0.UpdateParticipant)
+					// /with_auth/edit/stuff/judge/participant
+					upd.PATCH("/judge", controllersV0.UpdateJudge)
+				}
 			}
 
-			del := edit.Group("/delete")
+			competition := edit.Group("/competition")
+			// TODO: add "check competition edit rights" middleware
 			{
-				del.DELETE("/participant", controllersV0.DeleteParticipant)
-				del.DELETE("/judge", controllersV0.DeleteJudge)
-			}
-
-			upd := edit.Group("/update")
-			{
-				upd.PATCH("/participant", controllersV0.UpdateParticipant)
-				upd.PATCH("/judge", controllersV0.UpdateJudge)
+				// /with_auth/edit/competition/delete/id
+				competition.DELETE("/:id")
+				// /with_auth/edit/competition/update/id
+				competition.PATCH("/:id")
 			}
 		}
 
