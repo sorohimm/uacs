@@ -7,6 +7,8 @@ import (
 
 type IRepoV0 interface {
 	NewCompetition(collection *mongo.Collection, competition models.Competition) error
+	CreateCompetitionParticipantsEntity(collection *mongo.Collection, entity models.CompetitionParticipantsEntity) error
+	CreateCompetitionQualificationEntity(collection *mongo.Collection, entity models.CompetitionQualificationEntity) error
 
 	GetMyCompetitionsShort(collection *mongo.Collection, userId string) ([]models.CompetitionShortOutput, error)
 	GetAllCompetitionsShort(collection *mongo.Collection) ([]models.CompetitionShortOutput, error)

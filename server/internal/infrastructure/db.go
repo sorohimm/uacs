@@ -36,3 +36,7 @@ func (c *MongoClient) AcquireDatabase(name string) *mongo.Database {
 func (c *MongoClient) AcquireClient() *mongo.Client {
 	return c.Client
 }
+
+func (c *MongoClient) AcquireSession() (mongo.Session, error) {
+	return c.Client.StartSession()
+}

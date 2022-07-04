@@ -20,9 +20,10 @@ type DBAuthenticationData struct {
 }
 
 type Collections struct {
-	Competitions string
-	Participants string
-	Judges       string
+	Competitions   string
+	Participants   string
+	Judges         string
+	Qualifications string
 }
 
 type SsoCfg struct {
@@ -42,9 +43,10 @@ func New() (*Config, error) {
 			URL:      os.Getenv("DB_URL"),
 		},
 		Collections: Collections{
-			Competitions: os.Getenv("COMPETITIONS_COLLECTION"),
-			Participants: os.Getenv("PARTICIPANTS_COLLECTION"),
-			Judges:       os.Getenv("JUDGES_COLLECTION"),
+			Competitions:   os.Getenv("COMPETITIONS_COLLECTION"),
+			Participants:   os.Getenv("PARTICIPANTS_COLLECTION"),
+			Judges:         os.Getenv("JUDGES_COLLECTION"),
+			Qualifications: os.Getenv("QUALIFICATIONS_COLLECTION"),
 		},
 		SsoCfg: SsoCfg{
 			TokenValidateEndpoint: os.Getenv("KEYCLOAK_TOKEN_VALIDATE_ENDPOINT"),

@@ -20,9 +20,26 @@ func (s *ServicesV0) NewCompetition(newCompetition models.Competition) (models.C
 
 	newCompetition.GenerateUUID()
 
+	// TODO: переделать на транзакцию!!!!!
 	err := s.RepoV0.NewCompetition(collection, newCompetition)
 	if err != nil {
 		s.Log.Errorf("Failed create new competition. Received error: %s", err.Error())
+		return models.Competition{}, err
+	}
+
+	collection = database.Collection(s.Config.Collections.Participants)
+	participantsEntity := models.CompetitionParticipantsEntity{CompetitionUUID: newCompetition.UUID}
+	err = s.RepoV0.CreateCompetitionParticipantsEntity(collection, participantsEntity)
+	if err != nil {
+		s.Log.Errorf("Failed create competition participants entity. Received error: %s", err.Error())
+		return models.Competition{}, err
+	}
+
+	collection = database.Collection(s.Config.Collections.Qualifications)
+	qualificationEntity := models.CompetitionQualificationEntity{CompetitionUUID: newCompetition.UUID}
+	err = s.RepoV0.CreateCompetitionQualificationEntity(collection, qualificationEntity)
+	if err != nil {
+		s.Log.Errorf("Failed create competition qualifications entity. Received error: %s", err.Error())
 		return models.Competition{}, err
 	}
 

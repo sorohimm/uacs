@@ -50,9 +50,9 @@ func main() {
 
 	// public handles
 	r.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
-	r.GET("/competition", controllersV0.GetSingleCompetitionFull)
+	r.GET("/competition/:id", controllersV0.GetSingleCompetitionFull)
 
-	authorized := r.Group("/with_auth")
+	authorized := r.Group("/")
 	authorized.Use(middlewareV0.AuthRequired)
 	{
 		edit := authorized.Group("/edit")
@@ -60,38 +60,29 @@ func main() {
 			stuff := edit.Group("/stuff")
 			// TODO: add "check stuff edit rights" middleware
 			{
-				add := stuff.Group("/add")
-				{
-					// /with_auth/edit/stuff/add/participant
-					add.POST("/participant", controllersV0.AddParticipant)
-					// /with_auth/edit/stuff/add/judge
-					add.POST("/judge", controllersV0.AddJudge)
-				}
+				// POST /edit/stuff/participant adds participant
+				stuff.POST("/participant", controllersV0.AddParticipant)
+				// POST /edit/stuff/judge adds judge
+				stuff.POST("/judge", controllersV0.AddJudge)
 
-				del := stuff.Group("/delete")
-				{
-					// /with_auth/edit/stuff/delete/participant
-					del.DELETE("/participant", controllersV0.DeleteParticipant)
-					// /with_auth/edit/stuff/delete/judge
-					del.DELETE("/judge", controllersV0.DeleteJudge)
-				}
+				// DELETE /edit/stuff/participant deletes participant
+				stuff.DELETE("/participant/:id", controllersV0.DeleteParticipant)
+				// DELETE /edit/stuff/judge deletes judge
+				stuff.DELETE("/judge/:id", controllersV0.DeleteJudge)
 
-				upd := stuff.Group("/update")
-				{
-					// /with_auth/edit/stuff/update/participant
-					upd.PATCH("/participant", controllersV0.UpdateParticipant)
-					// /with_auth/edit/stuff/judge/participant
-					upd.PATCH("/judge", controllersV0.UpdateJudge)
-				}
+				// PATCH /edit/stuff/participant updates participant
+				stuff.PATCH("/participant", controllersV0.UpdateParticipant)
+				// PATCH /edit/stuff/judge updates judge
+				stuff.PATCH("/judge", controllersV0.UpdateJudge)
 			}
 
-			competition := edit.Group("/competition")
+			competition := edit.Group("/competitions")
 			// TODO: add "check competition edit rights" middleware
 			{
-				// /with_auth/edit/competition/delete/id
+				// /edit/competitions/:id
 				competition.DELETE("/:id")
-				// /with_auth/edit/competition/update/id
-				competition.PATCH("/:id")
+				// /edit/competitions/:id
+				competition.PATCH("/")
 			}
 		}
 

@@ -39,3 +39,18 @@ type CompetitionShortOutput struct {
 	Date        string `bson:"date" json:"date"`
 	LastUpdate  string `bson:"lastUpdate" json:"last_update"`
 }
+
+type CompetitionEntity interface {
+}
+
+type CompetitionParticipantsEntity struct {
+	CompetitionUUID string                   `bson:"competition_uuid" json:"competition_uuid"`
+	RM              []CompetitionParticipant `bson:"rm" json:"rm"`   // recursive men
+	RW              []CompetitionParticipant `bson:"rw" json:"rw"`   // recursive women
+	CM              []CompetitionParticipant `bson:"cm" json:"cm"`   // compound men
+	CW              []CompetitionParticipant `bson:"cw" json:"cw"`   // compound women
+	JRM             []CompetitionParticipant `bson:"jrw" json:"jrw"` // junior recursive men
+	JRW             []CompetitionParticipant `bson:"jrm" json:"jrm"` // junior recursive women
+	JCM             []CompetitionParticipant `bson:"jcw" json:"jcw"` // junior compound men
+	JCW             []CompetitionParticipant `bson:"jcm" json:"jcm"` // junior compound women
+}

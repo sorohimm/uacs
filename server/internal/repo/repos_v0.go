@@ -24,6 +24,24 @@ func (r *RepoV0) NewCompetition(collection *mongo.Collection, newCompetition mod
 	return nil
 }
 
+func (r *RepoV0) CreateCompetitionParticipantsEntity(collection *mongo.Collection, entity models.CompetitionParticipantsEntity) error {
+	_, err := collection.InsertOne(context.Background(), entity)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *RepoV0) CreateCompetitionQualificationEntity(collection *mongo.Collection, entity models.CompetitionQualificationEntity) error {
+	_, err := collection.InsertOne(context.Background(), entity)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *RepoV0) GetMyCompetitionsShort(collection *mongo.Collection, userId string) ([]models.CompetitionShortOutput, error) {
 	return nil, nil
 }
