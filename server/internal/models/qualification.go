@@ -26,3 +26,13 @@ type QualificationRoundScores struct {
 	Count10       int   `json:"count_10,omitempty"`
 	Count9        int   `json:"count_9,omitempty"`
 }
+
+type CompetitionQualification struct {
+	CompetitionUUID string                           `bson:"competition_uuid" json:"competition_uuid"`
+	RM              []QualificationParticipantScores `bson:"rm" json:"rm"`
+	RW              []QualificationParticipantScores `bson:"rw" json:"rw"`
+	CM              []QualificationParticipantScores `bson:"cm" json:"cm"`
+	CW              []QualificationParticipantScores `bson:"cw" json:"cw"`
+	JW              []QualificationParticipantScores `bson:"jw" json:"jw"`
+	JM              []QualificationParticipantScores `bson:"jm" json:"jm"`
+}
