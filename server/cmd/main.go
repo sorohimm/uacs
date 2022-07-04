@@ -48,6 +48,7 @@ func main() {
 
 	r := gin.Default()
 
+	// public handles
 	r.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
 	r.GET("/competition", controllersV0.GetSingleCompetitionFull)
 
@@ -94,6 +95,7 @@ func main() {
 			}
 		}
 
+		// allow for all authorized users
 		authorized.POST("/new_competition", controllersV0.NewCompetition)
 		authorized.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
 	}

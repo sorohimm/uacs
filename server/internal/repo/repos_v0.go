@@ -70,12 +70,12 @@ func (r *RepoV0) GetSingleCompetitionFull(collection *mongo.Collection, id strin
 	return competition, nil
 }
 
-func (r *RepoV0) AddParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
-	return models.CompetitionParticipant{}, nil
+func (r *RepoV0) AddParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) error {
+	return nil
 }
 
-func (r *RepoV0) AddJudge(collection *mongo.Collection, judge models.CompetitionJudge) (models.CompetitionJudge, error) {
-	return models.CompetitionJudge{}, nil
+func (r *RepoV0) AddJudge(collection *mongo.Collection, judge models.CompetitionJudge) error {
+	return nil
 }
 
 func (r *RepoV0) DeleteParticipant(collection *mongo.Collection, id string) error {
@@ -86,10 +86,18 @@ func (r *RepoV0) DeleteJudge(collection *mongo.Collection, id string) error {
 	return nil
 }
 
-func (r *RepoV0) UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
-	return models.CompetitionParticipant{}, nil
+func (r *RepoV0) UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) error {
+	return nil
 }
 
-func (r *RepoV0) UpdateJudge(collection *mongo.Collection, judge models.CompetitionJudge) (models.CompetitionJudge, error) {
-	return models.CompetitionJudge{}, nil
+func (r *RepoV0) UpdateJudge(collection *mongo.Collection, judge models.CompetitionJudge) error {
+	return nil
+}
+
+func (r *RepoV0) DeleteCompetition(collection *mongo.Collection, id string) error {
+	return nil
+}
+
+func (r *RepoV0) UpdateCompetition(collection *mongo.Collection, competition models.Competition) error {
+	return nil
 }

@@ -82,3 +82,11 @@ func (s *ServicesV0) UpdateParticipant(participant models.CompetitionParticipant
 func (s *ServicesV0) UpdateJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
 	return models.CompetitionJudge{}, nil
 }
+
+func (s *ServicesV0) DeleteCompetition(id string) error {
+	return nil
+}
+
+func (s *ServicesV0) UpdateCompetition(competition models.Competition) (models.Competition, error) {
+	return models.Competition{}, nil
+}

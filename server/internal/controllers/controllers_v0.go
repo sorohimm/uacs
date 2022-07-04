@@ -157,3 +157,11 @@ func (c *ControllersV0) UpdateJudge(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, participant)
 }
+
+func (c *ControllersV0) DeleteCompetition(ctx *gin.Context) {
+
+}
+
+func (c *ControllersV0) UpdateCompetition(ctx *gin.Context) {
+
+}

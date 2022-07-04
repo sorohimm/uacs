@@ -17,4 +17,7 @@ type IServicesV0 interface {
 
 	UpdateParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error)
 	UpdateJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error)
+
+	DeleteCompetition(id string) error
+	UpdateCompetition(competition models.Competition) (models.Competition, error)
 }
