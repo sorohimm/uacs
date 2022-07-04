@@ -20,4 +20,9 @@ type IServicesV0 interface {
 
 	DeleteCompetition(id string) error
 	UpdateCompetition(competition models.Competition) (models.Competition, error)
+
+	GetJudges(competitionId string) (models.CompetitionJudge, error)
+	GetJudge(judgeId string) ([]models.CompetitionJudge, error)
+	GetParticipants(competitionId string) ([]models.CompetitionParticipantShortOutput, error)
+	GetParticipant(participantId string) (models.CompetitionParticipant, error)
 }

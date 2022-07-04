@@ -107,3 +107,19 @@ func (s *ServicesV0) DeleteCompetition(id string) error {
 func (s *ServicesV0) UpdateCompetition(competition models.Competition) (models.Competition, error) {
 	return models.Competition{}, nil
 }
+
+func (s *ServicesV0) GetJudges(competitionId string) (models.CompetitionJudge, error) {
+	return models.CompetitionJudge{}, nil
+}
+
+func (s *ServicesV0) GetJudge(judgeId string) ([]models.CompetitionJudge, error) {
+	return nil, nil
+}
+
+func (s *ServicesV0) GetParticipants(competitionId string) ([]models.CompetitionParticipantShortOutput, error) {
+	return nil, nil
+}
+
+func (s *ServicesV0) GetParticipant(participantId string) (models.CompetitionParticipant, error) {
+	return models.CompetitionParticipant{}, nil
+}

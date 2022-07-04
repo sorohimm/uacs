@@ -192,3 +192,11 @@ func (c *ControllersV0) UpdateCompetition(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, competition)
 }
+
+func (c *ControllersV0) GetParticipants(ctx *gin.Context) {
+
+}
+
+func (c *ControllersV0) GetJudges(ctx *gin.Context) {
+
+}

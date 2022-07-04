@@ -37,6 +37,8 @@ func init() {
 }
 
 func main() {
+	gin.SetMode(gin.DebugMode) // TODO: switch on ReleaseMode on production
+
 	injector, err := infrastructure.Injector(log, ctx, cfg)
 	if err != nil {
 		log.Fatalf("Ijection fatal error: %s\n", err.Error())
@@ -44,13 +46,16 @@ func main() {
 
 	controllersV0 := injector.InjectControllersV0()
 	middlewareV0 := injector.InjectMiddlewareV0()
-	gin.SetMode(gin.DebugMode)
 
 	r := gin.Default()
 
 	// Public handles
-	r.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
+	r.GET("/competitions", controllersV0.GetAllCompetitionsShort)
 	r.GET("/competitions/:id", controllersV0.GetSingleCompetitionFull)
+	r.GET("/participants", controllersV0.GetParticipants)
+	r.GET("/participants/:id", controllersV0.GetParticipants)
+	r.GET("/judges", controllersV0.GetJudges)
+	r.GET("/judges/:id", controllersV0.GetJudges)
 
 	authorized := r.Group("/")
 	authorized.Use(middlewareV0.AuthRequired)
