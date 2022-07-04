@@ -4,12 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"os"
 	"time"
 	"uacs/internal/config"
 	"uacs/internal/infrastructure"
-
-	"go.uber.org/zap"
 )
 
 var (
@@ -44,16 +43,19 @@ func main() {
 	}
 
 	controllersV0 := injector.InjectV0Controllers()
-
+	middlewareV0 := injector.InjectV0Middleware()
 	gin.SetMode(gin.DebugMode)
 
 	r := gin.Default()
-	v0 := r.Group("/v0")
+
+	r.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
+	r.GET("/competition", controllersV0.GetSingleCompetitionFull)
+
+	authorized := r.Group("/with_auth")
+	authorized.Use(middlewareV0.AuthRequired)
 	{
-		v0.POST("/new_competition", controllersV0.NewCompetition)
-		v0.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
-		v0.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
-		v0.GET("/competition", controllersV0.GetSingleCompetitionFull)
+		authorized.POST("/new_competition", controllersV0.NewCompetition)
+		authorized.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
 	}
 
 	go healthCheck(log)

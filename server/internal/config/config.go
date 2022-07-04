@@ -7,6 +7,7 @@ type Config struct {
 	ProdPort    string
 	DBAuthData  DBAuthenticationData
 	Collections Collections
+	SsoCfg      SsoCfg
 }
 
 type DBAuthenticationData struct {
@@ -20,6 +21,10 @@ type DBAuthenticationData struct {
 
 type Collections struct {
 	Competitions string
+}
+
+type SsoCfg struct {
+	TokenValidateEndpoint string
 }
 
 func New() (*Config, error) {
@@ -36,6 +41,9 @@ func New() (*Config, error) {
 		},
 		Collections: Collections{
 			Competitions: os.Getenv("COMPETITIONS_COLLECTION"),
+		},
+		SsoCfg: SsoCfg{
+			TokenValidateEndpoint: os.Getenv("KEYCLOAK_TOKEN_VALIDATE_ENDPOINT"),
 		},
 	}, nil
 }

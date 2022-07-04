@@ -8,12 +8,14 @@ import (
 	"uacs/internal/config"
 	"uacs/internal/controllers"
 	"uacs/internal/interfaces"
+	"uacs/internal/middleware"
 	"uacs/internal/repo"
 	"uacs/internal/services"
 )
 
 type IInjector interface {
 	InjectV0Controllers() controllers.ControllersV0
+	InjectV0Middleware() middleware.MiddlewareV0
 }
 
 var env *environment
@@ -38,6 +40,14 @@ func (e *environment) InjectV0Controllers() controllers.ControllersV0 {
 			DbHandler: e.dbClient,
 		},
 		Validator: validator.New(),
+	}
+}
+
+func (e *environment) InjectV0Middleware() middleware.MiddlewareV0 {
+	return middleware.MiddlewareV0{
+		Log:        e.logger,
+		HttpClient: e.client,
+		Cfg:        e.cfg,
 	}
 }
 
