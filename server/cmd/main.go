@@ -48,9 +48,9 @@ func main() {
 
 	r := gin.Default()
 
-	// public handles
+	// Public handles
 	r.GET("/all_competitions", controllersV0.GetAllCompetitionsShort)
-	r.GET("/competition/:id", controllersV0.GetSingleCompetitionFull)
+	r.GET("/competitions/:id", controllersV0.GetSingleCompetitionFull)
 
 	authorized := r.Group("/")
 	authorized.Use(middlewareV0.AuthRequired)
@@ -79,15 +79,17 @@ func main() {
 			competition := edit.Group("/competitions")
 			// TODO: add "check competition edit rights" middleware
 			{
-				// /edit/competitions/:id
+				// DELETE /edit/competitions/:id deletes competition
 				competition.DELETE("/:id")
-				// /edit/competitions/:id
+				// PATCH /edit/competitions/:id updates competition
 				competition.PATCH("/")
 			}
 		}
 
-		// allow for all authorized users
-		authorized.POST("/new_competition", controllersV0.NewCompetition)
+		// Allowed for all authorized users
+		// POST /competition adds competition
+		authorized.POST("/competitions", controllersV0.NewCompetition)
+		// GET /competition provides your own(or to which you were invited) competitions list
 		authorized.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
 	}
 
