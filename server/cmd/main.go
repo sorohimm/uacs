@@ -44,18 +44,20 @@ func main() {
 		log.Fatalf("Ijection fatal error: %s\n", err.Error())
 	}
 
-	controllersV0 := injector.InjectControllersV0()
+	competitionsControllers := injector.InjectCompetitionsControllers()
+	participantControllers := injector.InjectParticipantControllers()
+	judgeControllers := injector.InjectJudgeControllers()
 	middlewareV0 := injector.InjectMiddlewareV0()
 
 	r := gin.Default()
 
 	// Public handles
-	r.GET("/competitions", controllersV0.GetAllCompetitionsShort)
-	r.GET("/competitions/:id", controllersV0.GetSingleCompetitionFull)
-	r.GET("/participants", controllersV0.GetParticipants)
-	r.GET("/participants/:id", controllersV0.GetParticipants)
-	r.GET("/judges", controllersV0.GetJudges)
-	r.GET("/judges/:id", controllersV0.GetJudges)
+	r.GET("/competitions", competitionsControllers.GetAllCompetitionsShort)
+	r.GET("/competitions/:id", competitionsControllers.GetSingleCompetitionFull)
+	r.GET("/participants", participantControllers.GetParticipants)
+	r.GET("/participants/:id", participantControllers.GetParticipants)
+	r.GET("/judges", judgeControllers.GetJudges)
+	r.GET("/judges/:id", judgeControllers.GetJudges)
 
 	authorized := r.Group("/")
 	authorized.Use(middlewareV0.AuthRequired)
@@ -66,19 +68,19 @@ func main() {
 			stuff.Use() // TODO: add "check stuff edit rights" middleware
 			{
 				// POST /edit/stuff/participant adds participant
-				stuff.POST("/participant", controllersV0.AddParticipant)
+				stuff.POST("/participant", participantControllers.AddParticipant)
 				// POST /edit/stuff/judge adds judge
-				stuff.POST("/judge", controllersV0.AddJudge)
+				stuff.POST("/judge", judgeControllers.AddJudge)
 
 				// DELETE /edit/stuff/participant deletes participant
-				stuff.DELETE("/participant/:id", controllersV0.DeleteParticipant)
+				stuff.DELETE("/participant/:id", participantControllers.DeleteParticipant)
 				// DELETE /edit/stuff/judge deletes judge
-				stuff.DELETE("/judge/:id", controllersV0.DeleteJudge)
+				stuff.DELETE("/judge/:id", judgeControllers.DeleteJudge)
 
 				// PATCH /edit/stuff/participant updates participant
-				stuff.PATCH("/participant", controllersV0.UpdateParticipant)
+				stuff.PATCH("/participant", participantControllers.UpdateParticipant)
 				// PATCH /edit/stuff/judge updates judge
-				stuff.PATCH("/judge", controllersV0.UpdateJudge)
+				stuff.PATCH("/judge", judgeControllers.UpdateJudge)
 			}
 
 			competition := edit.Group("/competitions")
@@ -93,9 +95,9 @@ func main() {
 
 		// Allowed for all authorized users
 		// POST /competitions adds competition
-		authorized.POST("/competitions", controllersV0.NewCompetition)
+		authorized.POST("/competitions", competitionsControllers.NewCompetition)
 		// GET /my-competition provides your own(or to which you were invited) competitions list
-		authorized.GET("/my-competitions", controllersV0.GetMyCompetitionsShort)
+		authorized.GET("/my-competitions", competitionsControllers.GetMyCompetitionsShort)
 	}
 
 	go healthCheck(log)

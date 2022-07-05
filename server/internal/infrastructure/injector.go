@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"context"
-	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"net/http"
 	"uacs/internal/config"
@@ -14,7 +13,9 @@ import (
 )
 
 type IInjector interface {
-	InjectControllersV0() controllers.ControllersV0
+	InjectCompetitionsControllers() controllers.CompetitionControllers
+	InjectParticipantControllers() controllers.ParticipantControllers
+	InjectJudgeControllers() controllers.JudgeControllers
 	InjectMiddlewareV0() middleware.MiddlewareV0
 }
 
@@ -27,19 +28,48 @@ type environment struct {
 	dbClient interfaces.IDBHandler
 }
 
-func (e *environment) InjectControllersV0() controllers.ControllersV0 {
-	return controllers.ControllersV0{
+func (e *environment) InjectCompetitionsControllers() controllers.CompetitionControllers {
+	return controllers.CompetitionControllers{
 		Log: e.logger,
-		ServicesV0: &services.ServicesV0{
+		CompetitionServices: &services.CompetitionServicesV0{
 			Log:    e.logger,
 			Config: e.cfg,
-			RepoV0: &repo.RepoV0{
+			CompetitionsRepoV0: &repo.CompetitionsRepoV0{
 				Log:    e.logger,
 				Config: e.cfg,
 			},
 			DbHandler: e.dbClient,
 		},
-		Validator: validator.New(),
+	}
+}
+
+func (e *environment) InjectParticipantControllers() controllers.ParticipantControllers {
+	return controllers.ParticipantControllers{
+		Log: e.logger,
+		ParticipantServices: &services.ParticipantServicesV0{
+			Log:    e.logger,
+			Config: e.cfg,
+			ParticipantRepoV0: &repo.ParticipantsRepoV0{
+				Log:    e.logger,
+				Config: e.cfg,
+			},
+			DbHandler: e.dbClient,
+		},
+	}
+}
+
+func (e *environment) InjectJudgeControllers() controllers.JudgeControllers {
+	return controllers.JudgeControllers{
+		Log: e.logger,
+		JudgeServices: &services.JudgeServicesV0{
+			Log:    e.logger,
+			Config: e.cfg,
+			JudgeRepoV0: &repo.JudgesRepoV0{
+				Log:    e.logger,
+				Config: e.cfg,
+			},
+			DbHandler: e.dbClient,
+		},
 	}
 }
 
