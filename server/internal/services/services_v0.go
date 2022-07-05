@@ -77,18 +77,58 @@ func (s *ServicesV0) GetSingleCompetitionFull(id string) (models.Competition, er
 }
 
 func (s *ServicesV0) AddParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	collection := database.Collection(s.Config.Collections.Participants)
+
+	participant.GenerateUUID()
+
+	err := s.RepoV0.AddParticipant(collection, participant)
+	if err != nil {
+		s.Log.Errorf("Failed to add participant. Received error: %s", err.Error())
+		return models.CompetitionParticipant{}, err
+	}
+
 	return models.CompetitionParticipant{}, nil
 }
 
 func (s *ServicesV0) AddJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	collection := database.Collection(s.Config.Collections.Judges)
+
+	judge.GenerateUUID()
+
+	err := s.RepoV0.AddJudge(collection, judge)
+	if err != nil {
+		s.Log.Errorf("Failed to add judge. Received error: %s", err.Error())
+		return models.CompetitionJudge{}, err
+	}
+
 	return models.CompetitionJudge{}, nil
 }
 
 func (s *ServicesV0) DeleteParticipant(id string) error {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	collection := database.Collection(s.Config.Collections.Participants)
+
+	err := s.RepoV0.DeleteParticipant(collection, id)
+	if err != nil {
+		s.Log.Errorf("Failed to delete participant. Received error: %s", err.Error())
+		return err
+	}
+
 	return nil
 }
 
 func (s *ServicesV0) DeleteJudge(id string) error {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	collection := database.Collection(s.Config.Collections.Judges)
+
+	err := s.RepoV0.DeleteJudge(collection, id)
+	if err != nil {
+		s.Log.Errorf("Failed to delete judge. Received error: %s", err.Error())
+		return err
+	}
+
 	return nil
 }
 
@@ -109,6 +149,9 @@ func (s *ServicesV0) UpdateCompetition(competition models.Competition) (models.C
 }
 
 func (s *ServicesV0) GetJudges(competitionId string) (models.CompetitionJudge, error) {
+	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
+	_ = database.Collection(s.Config.Collections.Judges)
+
 	return models.CompetitionJudge{}, nil
 }
 

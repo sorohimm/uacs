@@ -63,7 +63,7 @@ func main() {
 		edit := authorized.Group("/edit")
 		{
 			stuff := edit.Group("/stuff")
-			// TODO: add "check stuff edit rights" middleware
+			stuff.Use() // TODO: add "check stuff edit rights" middleware
 			{
 				// POST /edit/stuff/participant adds participant
 				stuff.POST("/participant", controllersV0.AddParticipant)
@@ -82,7 +82,7 @@ func main() {
 			}
 
 			competition := edit.Group("/competitions")
-			// TODO: add "check competition edit rights" middleware
+			competition.Use() // TODO: add "check competition edit rights" middleware
 			{
 				// DELETE /edit/competitions/:id deletes competition
 				competition.DELETE("/:id")
@@ -92,16 +92,16 @@ func main() {
 		}
 
 		// Allowed for all authorized users
-		// POST /competition adds competition
+		// POST /competitions adds competition
 		authorized.POST("/competitions", controllersV0.NewCompetition)
-		// GET /competition provides your own(or to which you were invited) competitions list
-		authorized.GET("/my_competitions", controllersV0.GetMyCompetitionsShort)
+		// GET /my-competition provides your own(or to which you were invited) competitions list
+		authorized.GET("/my-competitions", controllersV0.GetMyCompetitionsShort)
 	}
 
 	go healthCheck(log)
 
-	log.Infof("Server launched and running on http://localhost:%s\n", cfg.DevPort)
-	log.Fatal(r.Run(":" + cfg.DevPort))
+	log.Infof("Server launched and running on http://localhost:%s\n", cfg.ServerDevPort)
+	log.Fatal(r.Run(":" + cfg.ServerDevPort))
 }
 
 func healthCheck(log *zap.SugaredLogger) {

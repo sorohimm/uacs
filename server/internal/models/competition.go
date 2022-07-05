@@ -40,17 +40,31 @@ type CompetitionShortOutput struct {
 	LastUpdate  string `bson:"lastUpdate" json:"last_update"`
 }
 
-type CompetitionEntity interface {
+type CompetitionJudgesEntity struct {
+	CompetitionUUID string             `bson:"competition_uuid" json:"competition_uuid"`
+	JudgingStaff    []CompetitionJudge `bson:"judging_staff" json:"judging_staff"`
 }
 
 type CompetitionParticipantsEntity struct {
-	CompetitionUUID string                   `bson:"competition_uuid" json:"competition_uuid"`
-	RM              []CompetitionParticipant `bson:"rm" json:"rm"`   // recursive men
-	RW              []CompetitionParticipant `bson:"rw" json:"rw"`   // recursive women
-	CM              []CompetitionParticipant `bson:"cm" json:"cm"`   // compound men
-	CW              []CompetitionParticipant `bson:"cw" json:"cw"`   // compound women
-	JRM             []CompetitionParticipant `bson:"jrw" json:"jrw"` // junior recursive men
-	JRW             []CompetitionParticipant `bson:"jrm" json:"jrm"` // junior recursive women
-	JCM             []CompetitionParticipant `bson:"jcw" json:"jcw"` // junior compound men
-	JCW             []CompetitionParticipant `bson:"jcm" json:"jcm"` // junior compound women
+	CompetitionUUID string                                 `bson:"competition_uuid" json:"competition_uuid"`
+	Compound        CompetitionCompoundParticipantsEntity  `bson:"compound" json:"compound"`   // all compound
+	Recursive       CompetitionRecursiveParticipantsEntity `bson:"recursive" json:"recursive"` // all recursive
+}
+
+type CompetitionCompoundParticipantsEntity struct {
+	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // compound men
+	Women []CompetitionParticipant `bson:"women" json:"women"` // compound women
+	U21M  []CompetitionParticipant `bson:"U21M" json:"U21M"`   // under 21 compound men
+	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 compound women
+	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 compound men
+	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 compound women
+}
+
+type CompetitionRecursiveParticipantsEntity struct {
+	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // recursive men
+	Women []CompetitionParticipant `bson:"women" json:"women"` // recursive women
+	U21M  []CompetitionParticipant `bson:"U21M" json:"U21M"`   // under 21 recursive men
+	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 recursive women
+	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 recursive men
+	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 recursive women
 }

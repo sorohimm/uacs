@@ -3,11 +3,11 @@ package config
 import "os"
 
 type Config struct {
-	DevPort     string
-	ProdPort    string
-	DBAuthData  DBAuthenticationData
-	Collections Collections
-	SsoCfg      SsoCfg
+	ServerDevPort  string
+	ServerProdPort string
+	DBAuthData     DBAuthenticationData
+	Collections    Collections
+	SsoCfg         SsoCfg
 }
 
 type DBAuthenticationData struct {
@@ -32,8 +32,8 @@ type SsoCfg struct {
 
 func New() (*Config, error) {
 	return &Config{
-		DevPort:  os.Getenv("MAIN_SERVER_DEV_PORT"),
-		ProdPort: os.Getenv("MAIN_SERVER_PROD_PORT"),
+		ServerDevPort:  os.Getenv("MAIN_SERVER_DEV_PORT"),
+		ServerProdPort: os.Getenv("MAIN_SERVER_PROD_PORT"),
 		DBAuthData: DBAuthenticationData{
 			Username: os.Getenv("DB_DEV_USERNAME"),
 			Password: os.Getenv("DB_DEV_PASSWORD"),

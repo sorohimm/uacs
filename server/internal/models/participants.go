@@ -1,5 +1,7 @@
 package models
 
+import "github.com/google/uuid"
+
 type CompetitionParticipant struct {
 	UUID              string `bson:"uuid" json:"uuid"`
 	IRMStatus         string `bson:"IRMStatus" json:"irm_status,omitempty"`
@@ -29,8 +31,14 @@ type CompetitionParticipant struct {
 	Email             string `bson:"email" json:"email,omitempty"`
 }
 
+func (c *CompetitionParticipant) GenerateUUID() {
+	c.UUID = uuid.New().String()
+}
+
 type CompetitionParticipantShortOutput struct {
-	Name            string                `bson:"name" json:"name,omitempty"`
+	UUID            string                `bson:"uuid" json:"uuid"`
+	FirstName       string                `bson:"firstName" json:"first_name,omitempty"`
+	LastName        string                `bson:"lastName" json:"last_name,omitempty"`
 	Region          string                `bson:"region" json:"region,omitempty"`
 	RegionCode      string                `bson:"regionCode" json:"region_code,omitempty"`
 	DistancesPoints []DistancePointsShort `bson:"distancesPoints" json:"distances_points,omitempty"`
@@ -55,4 +63,8 @@ type CompetitionJudge struct {
 	RegionCode string `bson:"regionCode" json:"region_code,omitempty"`
 	Region     string `bson:"region" json:"region,omitempty"`
 	Category   string `bson:"category" json:"category,omitempty"`
+}
+
+func (c *CompetitionJudge) GenerateUUID() {
+	c.UUID = uuid.New().String()
 }

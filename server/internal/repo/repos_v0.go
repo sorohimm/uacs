@@ -88,11 +88,25 @@ func (r *RepoV0) GetSingleCompetitionFull(collection *mongo.Collection, id strin
 	return competition, nil
 }
 
-func (r *RepoV0) AddParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) error {
+func (r *RepoV0) AddParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error {
+	filter := bson.M{"competition_uuid": competitionId}
+	update := bson.D{{"$push", bson.D{{participant.Class, participant}}}}
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func (r *RepoV0) AddJudge(collection *mongo.Collection, judge models.CompetitionJudge) error {
+func (r *RepoV0) AddJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error {
+	filter := bson.M{"competition_uuid": competitionId}
+	update := bson.D{{"$push", bson.D{{"judging_staff", judge}}}}
+	_, err := collection.UpdateOne(context.Background(), filter, update)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -104,11 +118,11 @@ func (r *RepoV0) DeleteJudge(collection *mongo.Collection, id string) error {
 	return nil
 }
 
-func (r *RepoV0) UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant) error {
+func (r *RepoV0) UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error {
 	return nil
 }
 
-func (r *RepoV0) UpdateJudge(collection *mongo.Collection, judge models.CompetitionJudge) error {
+func (r *RepoV0) UpdateJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error {
 	return nil
 }
 
@@ -118,4 +132,81 @@ func (r *RepoV0) DeleteCompetition(collection *mongo.Collection, id string) erro
 
 func (r *RepoV0) UpdateCompetition(collection *mongo.Collection, competition models.Competition) error {
 	return nil
+}
+
+func (r *RepoV0) GetJudge(collection *mongo.Collection, id string, competitionId string) (models.CompetitionJudge, error) {
+	p := mongo.Pipeline{
+		{{"$match", bson.M{"competition_uuid": competitionId}}},
+		{{"$elemMatch", bson.M{"uuid": id}}},
+	}
+
+	var judge models.CompetitionJudge
+	err := collection.FindOne(context.Background(), p).Decode(&judge)
+	if err != nil {
+		return models.CompetitionJudge{}, err
+	}
+	return judge, nil
+}
+
+func (r *RepoV0) GetJudges(collection *mongo.Collection, competitionId string) ([]models.CompetitionJudge, error) {
+	return nil, nil
+}
+
+func (r *RepoV0) GetParticipant(collection *mongo.Collection, id string, competitionId string) (models.CompetitionParticipant, error) {
+	p := mongo.Pipeline{
+		{{"$match", bson.M{"competition_uuid": competitionId}}},
+		{{"$elemMatch", bson.M{"uuid": id}}},
+	}
+
+	var participant models.CompetitionParticipant
+	err := collection.FindOne(context.Background(), p).Decode(&participant)
+	if err != nil {
+		return models.CompetitionParticipant{}, err
+	}
+	return participant, nil
+}
+
+func (r *RepoV0) GetParticipants(collection *mongo.Collection, competitionId string) ([]models.CompetitionParticipantShortOutput, error) {
+	projection := bson.M{
+		"IRMStatus":         0,
+		"code":              0,
+		"sex":               0,
+		"birthDate":         0,
+		"targetNumber":      0,
+		"region2":           0,
+		"regionName2":       0,
+		"region3":           0,
+		"regionName3":       0,
+		"division":          0,
+		"class":             0,
+		"discharge":         0,
+		"isIndividual":      0,
+		"isTeam":            0,
+		"isIndividualFinal": 0,
+		"isTeamFinal":       0,
+		"isMixFinal":        0,
+		"isWheelchair":      0,
+		"email":             0,
+	}
+
+	opt := options.Find().SetProjection(projection)
+	p := mongo.Pipeline{
+		{{"$match", bson.M{"competition_uuid": competitionId}}},
+		{{"$elemMatch", bson.M{"uuid": id}}},
+	}
+	cursor, err := collection.Find(context.Background(), bson.M{}, opt)
+	if err != nil {
+		return nil, err
+	}
+
+	var participants []models.CompetitionParticipantShortOutput
+	for cursor.Next(context.TODO()) {
+		var participant models.CompetitionParticipantShortOutput
+		if err = cursor.Decode(&participant); err != nil {
+			return nil, err
+		}
+		participants = append(participants, participant)
+	}
+
+	return participants, nil
 }
