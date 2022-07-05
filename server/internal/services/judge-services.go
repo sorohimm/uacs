@@ -14,7 +14,7 @@ type JudgeServicesV0 struct {
 	DbHandler   interfaces.IDBHandler
 }
 
-func (s *JudgeServicesV0) AddJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
+func (s *JudgeServicesV0) CreateJudge(competitionId string, judge models.CompetitionJudge) (models.CompetitionJudge, error) {
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
 	collection := database.Collection(s.Config.Collections.Judges)
 
@@ -29,7 +29,7 @@ func (s *JudgeServicesV0) AddJudge(judge models.CompetitionJudge) (models.Compet
 	return models.CompetitionJudge{}, nil
 }
 
-func (s *JudgeServicesV0) DeleteJudge(id string) error {
+func (s *JudgeServicesV0) DeleteJudge(competitionId string, id string) error {
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
 	collection := database.Collection(s.Config.Collections.Judges)
 
@@ -42,7 +42,7 @@ func (s *JudgeServicesV0) DeleteJudge(id string) error {
 	return nil
 }
 
-func (s *JudgeServicesV0) UpdateJudge(judge models.CompetitionJudge) (models.CompetitionJudge, error) {
+func (s *JudgeServicesV0) UpdateJudge(competitionId string, judge models.CompetitionJudge) (models.CompetitionJudge, error) {
 	return models.CompetitionJudge{}, nil
 }
 
@@ -53,6 +53,6 @@ func (s *JudgeServicesV0) GetJudges(competitionId string) (models.CompetitionJud
 	return models.CompetitionJudge{}, nil
 }
 
-func (s *JudgeServicesV0) GetJudge(judgeId string) ([]models.CompetitionJudge, error) {
+func (s *JudgeServicesV0) GetJudge(competitionId string, judgeId string) ([]models.CompetitionJudge, error) {
 	return nil, nil
 }

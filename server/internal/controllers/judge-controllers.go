@@ -15,8 +15,12 @@ type JudgeControllers struct {
 }
 
 func (c *JudgeControllers) AddJudge(ctx *gin.Context) {
-	var newJudge models.CompetitionJudge
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
 
+	var newJudge models.CompetitionJudge
 	err := json.NewDecoder(ctx.Request.Body).Decode(&newJudge)
 	if err != nil {
 		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
@@ -24,7 +28,7 @@ func (c *JudgeControllers) AddJudge(ctx *gin.Context) {
 		return
 	}
 
-	judge, err := c.JudgeServices.AddJudge(newJudge)
+	judge, err := c.JudgeServices.CreateJudge(competitionId, newJudge)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
@@ -34,8 +38,12 @@ func (c *JudgeControllers) AddJudge(ctx *gin.Context) {
 }
 
 func (c *JudgeControllers) UpdateJudge(ctx *gin.Context) {
-	var updateJudge models.CompetitionJudge
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
 
+	var updateJudge models.CompetitionJudge
 	err := json.NewDecoder(ctx.Request.Body).Decode(&updateJudge)
 	if err != nil {
 		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
@@ -43,7 +51,7 @@ func (c *JudgeControllers) UpdateJudge(ctx *gin.Context) {
 		return
 	}
 
-	judge, err := c.JudgeServices.UpdateJudge(updateJudge)
+	judge, err := c.JudgeServices.UpdateJudge(competitionId, updateJudge)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
@@ -53,12 +61,35 @@ func (c *JudgeControllers) UpdateJudge(ctx *gin.Context) {
 }
 
 func (c *JudgeControllers) GetJudges(ctx *gin.Context) {
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+	judgeId := ctx.Param("id")
 
+	var err error
+	var result interface{}
+	switch judgeId {
+	case "":
+		result, err = c.JudgeServices.GetJudges(competitionId)
+	default:
+		result, err = c.JudgeServices.GetJudge(competitionId, judgeId)
+	}
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+	ctx.JSON(http.StatusOK, result)
 }
 
 func (c *JudgeControllers) DeleteJudge(ctx *gin.Context) {
+	competitionId := ctx.Query("competition")
 	id := ctx.Param("id")
-	err := c.JudgeServices.DeleteJudge(id)
+	if competitionId == "" || id == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+
+	err := c.JudgeServices.DeleteJudge(competitionId, id)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return

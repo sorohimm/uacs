@@ -14,7 +14,7 @@ type ParticipantServicesV0 struct {
 	DbHandler         interfaces.IDBHandler
 }
 
-func (s *ParticipantServicesV0) AddParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
+func (s *ParticipantServicesV0) CreateParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
 	collection := database.Collection(s.Config.Collections.Participants)
 
@@ -29,7 +29,7 @@ func (s *ParticipantServicesV0) AddParticipant(participant models.CompetitionPar
 	return models.CompetitionParticipant{}, nil
 }
 
-func (s *ParticipantServicesV0) UpdateParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
+func (s *ParticipantServicesV0) UpdateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
 	return models.CompetitionParticipant{}, nil
 }
 
@@ -37,11 +37,11 @@ func (s *ParticipantServicesV0) GetParticipants(competitionId string) ([]models.
 	return nil, nil
 }
 
-func (s *ParticipantServicesV0) GetParticipant(participantId string) (models.CompetitionParticipant, error) {
+func (s *ParticipantServicesV0) GetParticipant(competitionId string, participantId string) (models.CompetitionParticipant, error) {
 	return models.CompetitionParticipant{}, nil
 }
 
-func (s *ParticipantServicesV0) DeleteParticipant(id string) error {
+func (s *ParticipantServicesV0) DeleteParticipant(competitionId string, id string) error {
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
 	collection := database.Collection(s.Config.Collections.Participants)
 

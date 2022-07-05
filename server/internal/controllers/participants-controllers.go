@@ -24,7 +24,7 @@ func (c *ParticipantControllers) AddParticipant(ctx *gin.Context) {
 		return
 	}
 
-	participant, err := c.ParticipantServices.AddParticipant(newParticipant)
+	participant, err := c.ParticipantServices.CreateParticipant(newParticipant)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
@@ -34,8 +34,13 @@ func (c *ParticipantControllers) AddParticipant(ctx *gin.Context) {
 }
 
 func (c *ParticipantControllers) DeleteParticipant(ctx *gin.Context) {
+	competitionId := ctx.Query("competition")
 	id := ctx.Param("id")
-	err := c.ParticipantServices.DeleteParticipant(id)
+	if competitionId == "" || id == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+
+	err := c.ParticipantServices.DeleteParticipant(competitionId, id)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
@@ -45,24 +50,46 @@ func (c *ParticipantControllers) DeleteParticipant(ctx *gin.Context) {
 }
 
 func (c *ParticipantControllers) UpdateParticipant(ctx *gin.Context) {
-	var updateParticipant models.CompetitionParticipant
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+	var participant models.CompetitionParticipant
 
-	err := json.NewDecoder(ctx.Request.Body).Decode(&updateParticipant)
+	err := json.NewDecoder(ctx.Request.Body).Decode(&participant)
 	if err != nil {
 		c.Log.Errorf("Error occurred during unmarshalling. Error: %s", err.Error())
 		ctx.Status(http.StatusBadRequest)
 		return
 	}
 
-	participant, err := c.ParticipantServices.UpdateParticipant(updateParticipant)
+	result, err := c.ParticipantServices.UpdateParticipant(competitionId, participant)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
 	}
 
-	ctx.JSON(http.StatusOK, participant)
+	ctx.JSON(http.StatusOK, result)
 }
 
 func (c *ParticipantControllers) GetParticipants(ctx *gin.Context) {
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+	participantId := ctx.Param("id")
 
+	var err error
+	var result interface{}
+	switch participantId {
+	case "":
+		result, err = c.ParticipantServices.GetParticipants(competitionId)
+	default:
+		result, err = c.ParticipantServices.GetParticipant(competitionId, participantId)
+	}
+	if err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+	}
+
+	ctx.JSON(http.StatusOK, result)
 }
