@@ -46,25 +46,16 @@ type CompetitionJudgesEntity struct {
 }
 
 type CompetitionParticipantsEntity struct {
-	CompetitionUUID string                                 `bson:"competition_uuid" json:"competition_uuid"`
-	Compound        CompetitionCompoundParticipantsEntity  `bson:"compound" json:"compound"`   // all compound
-	Recursive       CompetitionRecursiveParticipantsEntity `bson:"recursive" json:"recursive"` // all recursive
+	CompetitionUUID string                                `bson:"competition_uuid" json:"competition_uuid"`
+	Compound        CompetitionDivisionParticipantsEntity `bson:"compound" json:"compound"`   // all compound
+	Recursive       CompetitionDivisionParticipantsEntity `bson:"recursive" json:"recursive"` // all recursive
 }
 
-type CompetitionCompoundParticipantsEntity struct {
-	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // compound men
-	Women []CompetitionParticipant `bson:"women" json:"women"` // compound women
-	U21M  []CompetitionParticipant `bson:"U21M" json:"U21M"`   // under 21 compound men
-	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 compound women
-	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 compound men
-	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 compound women
-}
-
-type CompetitionRecursiveParticipantsEntity struct {
-	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // recursive men
-	Women []CompetitionParticipant `bson:"women" json:"women"` // recursive women
-	U21M  []CompetitionParticipant `bson:"U21M" json:"U21M"`   // under 21 recursive men
-	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 recursive women
-	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 recursive men
-	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 recursive women
+type CompetitionDivisionParticipantsEntity struct {
+	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // mens
+	Women []CompetitionParticipant `bson:"women" json:"women"` // women
+	U21M  []CompetitionParticipant `bson:"U21M" json:"U21M"`   // under 21 men
+	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 women
+	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 men
+	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 women
 }
