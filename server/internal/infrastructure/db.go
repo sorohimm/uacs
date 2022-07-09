@@ -40,3 +40,8 @@ func (c *MongoClient) AcquireClient() *mongo.Client {
 func (c *MongoClient) AcquireSession() (mongo.Session, error) {
 	return c.Client.StartSession()
 }
+
+func (c *MongoClient) AcquireCollection(dbName, collName string) *mongo.Collection {
+	db := c.AcquireDatabase(dbName)
+	return db.Collection(collName)
+}

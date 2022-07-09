@@ -13,10 +13,10 @@ type ICompetitionServices interface {
 
 type IParticipantsServices interface {
 	GetParticipants(competitionId string) ([]models.CompetitionParticipantShortOutput, error)
-	GetParticipant(competitionId string, participantId string) (models.CompetitionParticipant, error)
+	GetParticipant(competitionId string, participantId string, division string, ac string) (models.CompetitionParticipant, error)
 	DeleteParticipant(competitionId string, id string) error
 	UpdateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error)
-	CreateParticipant(participant models.CompetitionParticipant) (models.CompetitionParticipant, error)
+	CreateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error)
 }
 
 type IJudgesServices interface {

@@ -15,12 +15,11 @@ type JudgeServicesV0 struct {
 }
 
 func (s *JudgeServicesV0) CreateJudge(competitionId string, judge models.CompetitionJudge) (models.CompetitionJudge, error) {
-	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
-	collection := database.Collection(s.Config.Collections.Judges)
+	collection := s.DbHandler.AcquireCollection(s.Config.DBAuthData.Name, s.Config.Collections.Judges)
 
 	judge.GenerateUUID()
 
-	err := s.JudgeRepoV0.AddJudge(collection, judge, "")
+	err := s.JudgeRepoV0.CreateJudge(collection, judge, "")
 	if err != nil {
 		s.Log.Errorf("Failed to add judge. Received error: %s", err.Error())
 		return models.CompetitionJudge{}, err
@@ -30,8 +29,7 @@ func (s *JudgeServicesV0) CreateJudge(competitionId string, judge models.Competi
 }
 
 func (s *JudgeServicesV0) DeleteJudge(competitionId string, id string) error {
-	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
-	collection := database.Collection(s.Config.Collections.Judges)
+	collection := s.DbHandler.AcquireCollection(s.Config.DBAuthData.Name, s.Config.Collections.Judges)
 
 	err := s.JudgeRepoV0.DeleteJudge(collection, id)
 	if err != nil {

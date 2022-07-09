@@ -47,7 +47,7 @@ func main() {
 	competitionsControllers := injector.InjectCompetitionsControllers()
 	participantControllers := injector.InjectParticipantControllers()
 	judgeControllers := injector.InjectJudgeControllers()
-	middlewareV0 := injector.InjectMiddlewareV0()
+	//middlewareV0 := injector.InjectMiddlewareV0()
 
 	r := gin.Default()
 
@@ -60,7 +60,7 @@ func main() {
 	r.GET("/judges/:id", judgeControllers.GetJudges)
 
 	authorized := r.Group("/")
-	authorized.Use(middlewareV0.AuthRequired)
+	//authorized.Use(middlewareV0.AuthRequired)
 	{
 		edit := authorized.Group("/edit")
 		{
@@ -95,7 +95,7 @@ func main() {
 
 		// Allowed for all authorized users
 		// POST /competitions adds competition
-		authorized.POST("/competitions", competitionsControllers.NewCompetition)
+		authorized.POST("/competition", competitionsControllers.NewCompetition)
 		// GET /my-competition provides your own(or to which you were invited) competitions list
 		authorized.GET("/my-competitions", competitionsControllers.GetMyCompetitionsShort)
 	}

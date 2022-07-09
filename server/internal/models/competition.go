@@ -51,6 +51,13 @@ type CompetitionParticipantsEntity struct {
 	Recursive       CompetitionDivisionParticipantsEntity `bson:"recursive" json:"recursive"` // all recursive
 }
 
+const MensDivision = "mens"
+const WomenDivision = "women"
+const Under21MenDivision = "U21M"
+const Under21WomenDivision = "U21W"
+const Under18MenDivision = "U18M"
+const Under18WomenDivision = "U18W"
+
 type CompetitionDivisionParticipantsEntity struct {
 	Mens  []CompetitionParticipant `bson:"mens" json:"mens"`   // mens
 	Women []CompetitionParticipant `bson:"women" json:"women"` // women
@@ -58,4 +65,165 @@ type CompetitionDivisionParticipantsEntity struct {
 	U21W  []CompetitionParticipant `bson:"U21W" json:"U21W"`   // under 21 women
 	U18M  []CompetitionParticipant `bson:"U18M" json:"U18M"`   // under 18 men
 	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 women
+}
+
+func (e CompetitionParticipantsEntity) ToShortOutput() []CompetitionParticipantShortOutput {
+	var output []CompetitionParticipantShortOutput
+	for _, el := range e.Compound.Mens {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Compound.Women {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Compound.U21M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Compound.U21M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Compound.U18M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Compound.U21W {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.Mens {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.Women {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.U21M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.U21M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.U18M {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	for _, el := range e.Recursive.U21W {
+		participant := CompetitionParticipantShortOutput{
+			UUID:        el.UUID,
+			FirstName:   el.FirstName,
+			LastName:    el.LastName,
+			Region:      el.Region,
+			RegionCode:  "TODO",
+			Division:    el.Division,
+			AgeCategory: el.AgeCategory,
+		}
+		output = append(output, participant)
+	}
+
+	return output
 }

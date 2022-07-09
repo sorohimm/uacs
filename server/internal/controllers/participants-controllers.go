@@ -15,6 +15,11 @@ type ParticipantControllers struct {
 }
 
 func (c *ParticipantControllers) AddParticipant(ctx *gin.Context) {
+	competitionId := ctx.Query("competition")
+	if competitionId == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+	}
+
 	var newParticipant models.CompetitionParticipant
 
 	err := json.NewDecoder(ctx.Request.Body).Decode(&newParticipant)
@@ -24,7 +29,7 @@ func (c *ParticipantControllers) AddParticipant(ctx *gin.Context) {
 		return
 	}
 
-	participant, err := c.ParticipantServices.CreateParticipant(newParticipant)
+	participant, err := c.ParticipantServices.CreateParticipant(competitionId, newParticipant)
 	if err != nil {
 		ctx.AbortWithError(errStatusCode(err), err)
 		return
@@ -85,7 +90,13 @@ func (c *ParticipantControllers) GetParticipants(ctx *gin.Context) {
 	case "":
 		result, err = c.ParticipantServices.GetParticipants(competitionId)
 	default:
-		result, err = c.ParticipantServices.GetParticipant(competitionId, participantId)
+		division := ctx.Query("div")
+		ac := ctx.Query("ac")
+		if division == "" || ac == "" {
+			ctx.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+		result, err = c.ParticipantServices.GetParticipant(competitionId, participantId, division, ac)
 	}
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)

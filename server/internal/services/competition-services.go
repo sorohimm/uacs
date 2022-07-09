@@ -28,7 +28,25 @@ func (s *CompetitionServicesV0) CreateCompetition(newCompetition models.Competit
 	}
 
 	collection = database.Collection(s.Config.Collections.Participants)
-	participantsEntity := models.CompetitionParticipantsEntity{CompetitionUUID: newCompetition.UUID}
+	participantsEntity := models.CompetitionParticipantsEntity{
+		CompetitionUUID: newCompetition.UUID,
+		Compound: models.CompetitionDivisionParticipantsEntity{
+			Mens:  []models.CompetitionParticipant{},
+			Women: []models.CompetitionParticipant{},
+			U21M:  []models.CompetitionParticipant{},
+			U21W:  []models.CompetitionParticipant{},
+			U18W:  []models.CompetitionParticipant{},
+			U18M:  []models.CompetitionParticipant{},
+		},
+		Recursive: models.CompetitionDivisionParticipantsEntity{
+			Mens:  []models.CompetitionParticipant{},
+			Women: []models.CompetitionParticipant{},
+			U21M:  []models.CompetitionParticipant{},
+			U21W:  []models.CompetitionParticipant{},
+			U18W:  []models.CompetitionParticipant{},
+			U18M:  []models.CompetitionParticipant{},
+		},
+	}
 	err = s.CompetitionsRepoV0.CreateCompetitionParticipantsEntity(collection, participantsEntity)
 	if err != nil {
 		s.Log.Errorf("Failed create competition participants entity. Received error: %s", err.Error())
@@ -51,8 +69,7 @@ func (s *CompetitionServicesV0) GetMyCompetitionsShort(userId string) ([]models.
 }
 
 func (s *CompetitionServicesV0) GetAllCompetitionsShort() ([]models.CompetitionShortOutput, error) {
-	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
-	collection := database.Collection(s.Config.Collections.Competitions)
+	collection := s.DbHandler.AcquireCollection(s.Config.DBAuthData.Name, s.Config.Collections.Competitions)
 
 	competitions, err := s.CompetitionsRepoV0.GetAllCompetitionsShort(collection)
 	if err != nil {
@@ -64,8 +81,7 @@ func (s *CompetitionServicesV0) GetAllCompetitionsShort() ([]models.CompetitionS
 }
 
 func (s *CompetitionServicesV0) GetSingleCompetitionFull(id string) (models.Competition, error) {
-	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
-	collection := database.Collection(s.Config.Collections.Competitions)
+	collection := s.DbHandler.AcquireCollection(s.Config.DBAuthData.Name, s.Config.Collections.Competitions)
 
 	competition, err := s.CompetitionsRepoV0.GetSingleCompetitionFull(collection, id)
 	if err != nil {

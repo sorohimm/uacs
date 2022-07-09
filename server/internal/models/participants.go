@@ -19,7 +19,7 @@ type CompetitionParticipant struct {
 	Region3           string `bson:"region3" json:"region_3,omitempty"`
 	RegionName3       string `bson:"regionName3" json:"region_name_3,omitempty"`
 	Division          string `bson:"division" json:"division,omitempty"`
-	Class             string `bson:"class" json:"class,omitempty"`
+	AgeCategory       string `bson:"class" json:"class,omitempty"`
 	AgeClass          string `bson:"ageClass" json:"age_class,omitempty"`
 	Discharge         string `bson:"discharge" json:"discharge,omitempty"`
 	IsIndividual      bool   `bson:"isIndividual" json:"is_individual,omitempty"`
@@ -39,6 +39,8 @@ type CompetitionParticipantShortOutput struct {
 	UUID            string                `bson:"uuid" json:"uuid"`
 	FirstName       string                `bson:"firstName" json:"first_name,omitempty"`
 	LastName        string                `bson:"lastName" json:"last_name,omitempty"`
+	Division        string                `bson:"division" json:"division"`
+	AgeCategory     string                `bson:"ageCategory" json:"age_category"`
 	Region          string                `bson:"region" json:"region,omitempty"`
 	RegionCode      string                `bson:"regionCode" json:"region_code,omitempty"`
 	DistancesPoints []DistancePointsShort `bson:"distancesPoints" json:"distances_points,omitempty"`

@@ -14,7 +14,7 @@ type JudgesRepoV0 struct {
 	Config *config.Config
 }
 
-func (r *JudgesRepoV0) AddJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error {
+func (r *JudgesRepoV0) CreateJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error {
 	filter := bson.M{"competition_uuid": competitionId}
 	update := bson.D{{"$push", bson.D{{"judging_staff", judge}}}}
 	_, err := collection.UpdateOne(context.Background(), filter, update)

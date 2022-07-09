@@ -18,15 +18,15 @@ type ICompetitionRepoV0 interface {
 }
 
 type IParticipantRepoV0 interface {
-	AddParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error
+	CreateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error
 	DeleteParticipant(collection *mongo.Collection, id string) error
 	UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error
 	GetParticipant(collection *mongo.Collection, id, competitionId, division, ac string) (models.CompetitionParticipant, error)
-	GetParticipants(collection *mongo.Collection, competitionId string) ([]models.CompetitionParticipantShortOutput, error)
+	GetParticipants(collection *mongo.Collection, competitionId string) (models.CompetitionParticipantsEntity, error)
 }
 
 type IJudgeRepoV0 interface {
-	AddJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error
+	CreateJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error
 	DeleteJudge(collection *mongo.Collection, id string) error
 	UpdateJudge(collection *mongo.Collection, judge models.CompetitionJudge, competitionId string) error
 	GetJudge(collection *mongo.Collection, id string, competitionId string) (models.CompetitionJudge, error)

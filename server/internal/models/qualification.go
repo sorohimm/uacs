@@ -24,13 +24,16 @@ type QualificationRoundScores struct {
 }
 
 type CompetitionQualificationEntity struct {
-	CompetitionUUID string                           `bson:"competition_uuid" json:"competition_uuid"`
-	RM              []QualificationParticipantScores `bson:"rm" json:"rm"`   // recursive men
-	RW              []QualificationParticipantScores `bson:"rw" json:"rw"`   // recursive women
-	CM              []QualificationParticipantScores `bson:"cm" json:"cm"`   // compound men
-	CW              []QualificationParticipantScores `bson:"cw" json:"cw"`   // compound women
-	JRM             []QualificationParticipantScores `bson:"jrw" json:"jrw"` // junior recursive men
-	JRW             []QualificationParticipantScores `bson:"jrm" json:"jrm"` // junior recursive women
-	JCM             []QualificationParticipantScores `bson:"jcw" json:"jcw"` // junior compound men
-	JCW             []QualificationParticipantScores `bson:"jcm" json:"jcm"` // junior compound women
+	CompetitionUUID string                                      `bson:"competition_uuid" json:"competition_uuid"`
+	Compound        CompetitionDivisionParticipantsScoresEntity `bson:"compound" json:"compound"`   // all compound
+	Recursive       CompetitionDivisionParticipantsScoresEntity `bson:"recursive" json:"recursive"` // all recursive
+}
+
+type CompetitionDivisionParticipantsScoresEntity struct {
+	Mens  []QualificationParticipantScores `bson:"mens" json:"mens"`   // mens
+	Women []QualificationParticipantScores `bson:"women" json:"women"` // women
+	U21M  []QualificationParticipantScores `bson:"U21M" json:"U21M"`   // under 21 men
+	U21W  []QualificationParticipantScores `bson:"U21W" json:"U21W"`   // under 21 women
+	U18M  []QualificationParticipantScores `bson:"U18M" json:"U18M"`   // under 18 men
+	U18W  []QualificationParticipantScores `bson:"U18W" json:"U18W"`   // under 18 women
 }
