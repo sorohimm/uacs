@@ -8,8 +8,7 @@ import (
 type ICompetitionRepoV0 interface {
 	CreateCompetition(collection *mongo.Collection, competition models.Competition) error
 	DeleteCompetition(collection *mongo.Collection, id string) error
-	CreateCompetitionParticipantsEntity(collection *mongo.Collection, entity models.CompetitionParticipantsEntity) error
-	CreateCompetitionQualificationEntity(collection *mongo.Collection, entity models.CompetitionQualificationEntity) error
+	PrepareCompetitionEntity(collection *mongo.Collection, entity interface{}) error
 	UpdateCompetition(collection *mongo.Collection, competition models.Competition) error
 
 	GetMyCompetitionsShort(collection *mongo.Collection, userId string) ([]models.CompetitionShortOutput, error)

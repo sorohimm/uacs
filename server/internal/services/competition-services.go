@@ -1,6 +1,7 @@
 package services
 
 import (
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"uacs/internal/config"
 	"uacs/internal/interfaces"
@@ -27,26 +28,53 @@ func (s *CompetitionServicesV0) CreateCompetition(newCompetition models.Competit
 		return models.Competition{}, err
 	}
 
-	collection = database.Collection(s.Config.Collections.Participants)
-	participantsEntity := models.CompetitionParticipantsEntity{
-		CompetitionUUID: newCompetition.UUID,
-		Participants:    []models.CompetitionParticipant{},
-	}
-	err = s.CompetitionsRepoV0.CreateCompetitionParticipantsEntity(collection, participantsEntity)
+	err = s.prepareEntities(database, newCompetition.UUID)
 	if err != nil {
-		s.Log.Errorf("Failed create competition participants entity. Received error: %s", err.Error())
-		return models.Competition{}, err
-	}
-
-	collection = database.Collection(s.Config.Collections.Qualifications)
-	qualificationEntity := models.CompetitionQualificationEntity{CompetitionUUID: newCompetition.UUID}
-	err = s.CompetitionsRepoV0.CreateCompetitionQualificationEntity(collection, qualificationEntity)
-	if err != nil {
-		s.Log.Errorf("Failed create competition qualifications entity. Received error: %s", err.Error())
+		s.Log.Errorf("Failed to prepare entities. Received error: %s", err.Error())
 		return models.Competition{}, err
 	}
 
 	return newCompetition, nil
+}
+
+func (s *CompetitionServicesV0) prepareEntities(db *mongo.Database, compId string) error {
+	collection := db.Collection(s.Config.Collections.Participants)
+	participantsEntity := models.CompetitionParticipantsEntity{
+		CompetitionUUID: compId,
+		Participants:    []models.CompetitionParticipant{},
+	}
+	err := s.CompetitionsRepoV0.PrepareCompetitionEntity(collection, participantsEntity)
+
+	collection = db.Collection(s.Config.Collections.Qualifications)
+	qualificationEntity := models.CompetitionQualificationEntity{
+		CompetitionUUID: compId,
+		Compound: models.CompetitionDivisionParticipantsScoresEntity{
+			Mens:  []models.QualificationParticipantScores{},
+			Women: []models.QualificationParticipantScores{},
+			U21M:  []models.QualificationParticipantScores{},
+			U21W:  []models.QualificationParticipantScores{},
+			U18M:  []models.QualificationParticipantScores{},
+			U18W:  []models.QualificationParticipantScores{},
+		},
+		Recursive: models.CompetitionDivisionParticipantsScoresEntity{
+			Mens:  []models.QualificationParticipantScores{},
+			Women: []models.QualificationParticipantScores{},
+			U21M:  []models.QualificationParticipantScores{},
+			U21W:  []models.QualificationParticipantScores{},
+			U18M:  []models.QualificationParticipantScores{},
+			U18W:  []models.QualificationParticipantScores{},
+		},
+	}
+	err = s.CompetitionsRepoV0.PrepareCompetitionEntity(collection, qualificationEntity)
+
+	collection = db.Collection(s.Config.Collections.Judges)
+	judgesEntity := models.CompetitionJudgesEntity{
+		CompetitionUUID: compId,
+		JudgingStaff:    []models.CompetitionJudge{},
+	}
+	err = s.CompetitionsRepoV0.PrepareCompetitionEntity(collection, judgesEntity)
+
+	return err
 }
 
 func (s *CompetitionServicesV0) GetMyCompetitionsShort(userId string) ([]models.CompetitionShortOutput, error) {

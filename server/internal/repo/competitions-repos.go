@@ -24,16 +24,7 @@ func (r *CompetitionsRepoV0) CreateCompetition(collection *mongo.Collection, new
 	return nil
 }
 
-func (r *CompetitionsRepoV0) CreateCompetitionParticipantsEntity(collection *mongo.Collection, entity models.CompetitionParticipantsEntity) error {
-	_, err := collection.InsertOne(context.Background(), entity)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (r *CompetitionsRepoV0) CreateCompetitionQualificationEntity(collection *mongo.Collection, entity models.CompetitionQualificationEntity) error {
+func (r *CompetitionsRepoV0) PrepareCompetitionEntity(collection *mongo.Collection, entity interface{}) error {
 	_, err := collection.InsertOne(context.Background(), entity)
 	if err != nil {
 		return err
