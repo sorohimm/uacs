@@ -7,23 +7,23 @@ import (
 
 type Competition struct {
 	UUID                   string    `bson:"uuid" json:"uuid" validate:"omitempty"`
-	CreatorUUID            string    `bson:"creatorUUID" json:"creator_uuid" validate:"required"`
+	CreatorUUID            string    `bson:"creatorUUID" json:"creatorUUID" validate:"required"`
 	Code                   string    `bson:"code" json:"code" validate:"required"`
 	Name                   string    `bson:"name" json:"name" validate:"required"`
 	Description            string    `bson:"description" json:"description"`
-	ShortName              string    `bson:"shortName" json:"short_name"`
-	OrganizedBy            string    `bson:"organizedBy" json:"organized_by" validate:"required"`
-	OrganizedByDescription string    `bson:"organizedByDescription" json:"organized_by_description"`
-	CompetitionRules       string    `bson:"competitionRules" json:"competition_rules" validate:"required"`
-	TormentType            string    `bson:"tormentType" json:"torment_type"`
-	AgeCategories          string    `bson:"ageCategories" json:"age_categories" validate:"required"`
+	ShortName              string    `bson:"shortName" json:"shortName"`
+	OrganizedBy            string    `bson:"organizedBy" json:"organizedBy" validate:"required"`
+	OrganizedByDescription string    `bson:"organizedByDescription" json:"organizedByDescription"`
+	CompetitionRules       string    `bson:"competitionRules" json:"competitionRules" validate:"required"`
+	TormentType            string    `bson:"tormentType" json:"tormentType"`
+	AgeCategories          string    `bson:"ageCategories" json:"ageCategories" validate:"required"`
 	Venue                  string    `bson:"venue" json:"venue"`
 	Country                string    `bson:"country" json:"country" validate:"omitempty"`
 	City                   string    `bson:"city" json:"city" validate:"required"`
-	DateFrom               time.Time `bson:"dateFrom" json:"date_from" validate:"required"`
-	DateTo                 time.Time `bson:"dateTo" json:"date_to" validate:"required"`
-	TimeZone               string    `bson:"timeZone" json:"time_zone"`
-	LastUpdate             string    `bson:"lastUpdate" json:"last_update"`
+	DateFrom               time.Time `bson:"dateFrom" json:"dateFrom" validate:"required"`
+	DateTo                 time.Time `bson:"dateTo" json:"dateTo" validate:"required"`
+	TimeZone               string    `bson:"timeZone" json:"timeZone"`
+	LastUpdate             string    `bson:"lastUpdate" json:"lastUpdate"`
 }
 
 func (c *Competition) GenerateUUID() {
@@ -34,19 +34,19 @@ type CompetitionShortOutput struct {
 	UUID        string `bson:"uuid" json:"uuid"`
 	Code        string `bson:"code" json:"code"`
 	Name        string `bson:"name" json:"name"`
-	OrganizedBy string `bson:"organizedBy" json:"organized_by"`
+	OrganizedBy string `bson:"organizedBy" json:"organizedBy"`
 	Location    string `bson:"location" json:"location"`
 	Date        string `bson:"date" json:"date"`
-	LastUpdate  string `bson:"lastUpdate" json:"last_update"`
+	LastUpdate  string `bson:"lastUpdate" json:"lastUpdate"`
 }
 
 type CompetitionJudgesEntity struct {
-	CompetitionUUID string             `bson:"competition_uuid" json:"competition_uuid"`
-	JudgingStaff    []CompetitionJudge `bson:"judging_staff" json:"judging_staff"`
+	CompetitionUUID string             `bson:"competitionUUID" json:"competitionUUID"`
+	JudgingStaff    []CompetitionJudge `bson:"judgingStaff" json:"judgingStaff"`
 }
 
-type CompetitionParticipantsEntity struct {
-	CompetitionUUID string                                `bson:"competition_uuid" json:"competition_uuid"`
+type CompetitionParticipantsEntitySorted struct {
+	CompetitionUUID string                                `bson:"competitionUUID" json:"competitionUUID"`
 	Compound        CompetitionDivisionParticipantsEntity `bson:"compound" json:"compound"`   // all compound
 	Recursive       CompetitionDivisionParticipantsEntity `bson:"recursive" json:"recursive"` // all recursive
 }
@@ -67,7 +67,12 @@ type CompetitionDivisionParticipantsEntity struct {
 	U18W  []CompetitionParticipant `bson:"U18W" json:"U18W"`   // under 18 women
 }
 
-func (e CompetitionParticipantsEntity) ToShortOutput() []CompetitionParticipantShortOutput {
+type CompetitionParticipantsEntity struct {
+	CompetitionUUID string                   `bson:"competitionUUID" json:"competitionUUID"`
+	Participants    []CompetitionParticipant `bson:"participants" json:"participants"` // participants
+}
+
+func (e CompetitionParticipantsEntitySorted) ToShortOutput() []CompetitionParticipantShortOutput {
 	var output []CompetitionParticipantShortOutput
 	for _, el := range e.Compound.Mens {
 		participant := CompetitionParticipantShortOutput{

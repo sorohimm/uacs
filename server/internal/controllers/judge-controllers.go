@@ -30,7 +30,7 @@ func (c *JudgeControllers) AddJudge(ctx *gin.Context) {
 
 	judge, err := c.JudgeServices.CreateJudge(competitionId, newJudge)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -53,7 +53,7 @@ func (c *JudgeControllers) UpdateJudge(ctx *gin.Context) {
 
 	judge, err := c.JudgeServices.UpdateJudge(competitionId, updateJudge)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -91,7 +91,7 @@ func (c *JudgeControllers) DeleteJudge(ctx *gin.Context) {
 
 	err := c.JudgeServices.DeleteJudge(competitionId, id)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 

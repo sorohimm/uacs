@@ -19,7 +19,7 @@ func (s *JudgeServicesV0) CreateJudge(competitionId string, judge models.Competi
 
 	judge.GenerateUUID()
 
-	err := s.JudgeRepoV0.CreateJudge(collection, judge, "")
+	err := s.JudgeRepoV0.CreateJudge(collection, judge, competitionId)
 	if err != nil {
 		s.Log.Errorf("Failed to add judge. Received error: %s", err.Error())
 		return models.CompetitionJudge{}, err

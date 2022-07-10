@@ -30,22 +30,7 @@ func (s *CompetitionServicesV0) CreateCompetition(newCompetition models.Competit
 	collection = database.Collection(s.Config.Collections.Participants)
 	participantsEntity := models.CompetitionParticipantsEntity{
 		CompetitionUUID: newCompetition.UUID,
-		Compound: models.CompetitionDivisionParticipantsEntity{
-			Mens:  []models.CompetitionParticipant{},
-			Women: []models.CompetitionParticipant{},
-			U21M:  []models.CompetitionParticipant{},
-			U21W:  []models.CompetitionParticipant{},
-			U18W:  []models.CompetitionParticipant{},
-			U18M:  []models.CompetitionParticipant{},
-		},
-		Recursive: models.CompetitionDivisionParticipantsEntity{
-			Mens:  []models.CompetitionParticipant{},
-			Women: []models.CompetitionParticipant{},
-			U21M:  []models.CompetitionParticipant{},
-			U21W:  []models.CompetitionParticipant{},
-			U18W:  []models.CompetitionParticipant{},
-			U18M:  []models.CompetitionParticipant{},
-		},
+		Participants:    []models.CompetitionParticipant{},
 	}
 	err = s.CompetitionsRepoV0.CreateCompetitionParticipantsEntity(collection, participantsEntity)
 	if err != nil {

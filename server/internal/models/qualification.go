@@ -15,16 +15,16 @@ type QualificationDistanceScores struct {
 }
 
 type QualificationRoundScores struct {
-	Index         int   `bson:"index" json:"index,omitempty"`
-	Points        []int `bson:"points" json:"points,omitempty"`
-	RoundResult   int   `bson:"roundResult" json:"round_result,omitempty"`
-	InterimResult int   `bson:"interimResult" json:"interim_result,omitempty"`
-	Count10       int   `bson:"count10" json:"count_10,omitempty"`
-	Count9        int   `bson:"count9" json:"count_9,omitempty"`
+	Index         int   `bson:"index" json:"index"`
+	Points        []int `bson:"points" json:"points"`
+	RoundResult   int   `bson:"roundResult" json:"roundResult"`
+	InterimResult int   `bson:"interimResult" json:"interimResult"`
+	Count10       int   `bson:"count10" json:"count10"`
+	Count9        int   `bson:"count9" json:"count9"`
 }
 
 type CompetitionQualificationEntity struct {
-	CompetitionUUID string                                      `bson:"competition_uuid" json:"competition_uuid"`
+	CompetitionUUID string                                      `bson:"competitionUUID" json:"competitionUUID"`
 	Compound        CompetitionDivisionParticipantsScoresEntity `bson:"compound" json:"compound"`   // all compound
 	Recursive       CompetitionDivisionParticipantsScoresEntity `bson:"recursive" json:"recursive"` // all recursive
 }

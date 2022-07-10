@@ -12,8 +12,8 @@ type ICompetitionServices interface {
 }
 
 type IParticipantsServices interface {
-	GetParticipants(competitionId string) ([]models.CompetitionParticipantShortOutput, error)
-	GetParticipant(competitionId string, participantId string, division string, ac string) (models.CompetitionParticipant, error)
+	GetParticipants(competitionId string) (models.CompetitionParticipantsEntity, error)
+	GetParticipant(competitionId string, id string) (models.CompetitionParticipant, error)
 	DeleteParticipant(competitionId string, id string) error
 	UpdateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error)
 	CreateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error)

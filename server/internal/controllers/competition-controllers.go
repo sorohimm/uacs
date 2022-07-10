@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
@@ -27,7 +26,7 @@ func (c *CompetitionControllers) NewCompetition(ctx *gin.Context) {
 
 	competition, err := c.CompetitionServices.CreateCompetition(newCompetition)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -41,7 +40,7 @@ func (c *CompetitionControllers) GetMyCompetitionsShort(ctx *gin.Context) {
 func (c *CompetitionControllers) GetAllCompetitionsShort(ctx *gin.Context) {
 	competitions, err := c.CompetitionServices.GetAllCompetitionsShort()
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -50,9 +49,13 @@ func (c *CompetitionControllers) GetAllCompetitionsShort(ctx *gin.Context) {
 
 func (c *CompetitionControllers) GetSingleCompetitionFull(ctx *gin.Context) {
 	id := ctx.Param("id")
+	if id == "" {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 	competition, err := c.CompetitionServices.GetSingleCompetitionFull(id)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -62,13 +65,13 @@ func (c *CompetitionControllers) GetSingleCompetitionFull(ctx *gin.Context) {
 func (c *CompetitionControllers) DeleteCompetition(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if id == "" {
-		ctx.AbortWithError(http.StatusBadRequest, errors.New("empty id"))
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
 	err := c.CompetitionServices.DeleteCompetition(id)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 }
@@ -85,7 +88,7 @@ func (c *CompetitionControllers) UpdateCompetition(ctx *gin.Context) {
 
 	competition, err := c.CompetitionServices.UpdateCompetition(updateCompetition)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 

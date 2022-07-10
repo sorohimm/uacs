@@ -1,13 +1,13 @@
 package controllers
 
 import (
+	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
-	"uacs/internal/services"
 )
 
 func errStatusCode(err error) int {
 	switch err {
-	case services.ErrIdNotFount:
+	case mongo.ErrNoDocuments:
 		return http.StatusNotFound
 	default:
 		return http.StatusInternalServerError

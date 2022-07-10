@@ -25,7 +25,7 @@ func (s *ParticipantServicesV0) CreateParticipant(competitionId string, particip
 		return models.CompetitionParticipant{}, err
 	}
 
-	return models.CompetitionParticipant{}, nil
+	return participant, nil
 }
 
 func (s *ParticipantServicesV0) UpdateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {
@@ -46,10 +46,10 @@ func (s *ParticipantServicesV0) GetParticipants(competitionId string) (models.Co
 	return participants, nil
 }
 
-func (s *ParticipantServicesV0) GetParticipant(competitionId string, participantId string, division string, ac string) (models.CompetitionParticipant, error) {
+func (s *ParticipantServicesV0) GetParticipant(competitionId string, id string) (models.CompetitionParticipant, error) {
 	collection := s.DbHandler.AcquireCollection(s.Config.DBAuthData.Name, s.Config.Collections.Participants)
 
-	participant, err := s.ParticipantRepoV0.GetParticipant(collection, competitionId, participantId, division, ac)
+	participant, err := s.ParticipantRepoV0.GetParticipant(collection, competitionId, id)
 	if err != nil {
 		s.Log.Error(err)
 		return models.CompetitionParticipant{}, err
@@ -62,7 +62,7 @@ func (s *ParticipantServicesV0) DeleteParticipant(competitionId string, id strin
 	database := s.DbHandler.AcquireDatabase(s.Config.DBAuthData.Name)
 	collection := database.Collection(s.Config.Collections.Participants)
 
-	err := s.ParticipantRepoV0.DeleteParticipant(collection, id)
+	err := s.ParticipantRepoV0.DeleteParticipant(collection, competitionId, id)
 	if err != nil {
 		s.Log.Errorf("Failed to delete participant. Received error: %s", err.Error())
 		return err

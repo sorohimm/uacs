@@ -3,19 +3,19 @@ package models
 import "time"
 
 type WarmUpSchedule struct {
-	Day       string    `json:"day,omitempty"`
-	StartTime time.Time `json:"start_time"`
-	EndTime   time.Time `json:"end_time"`
-	Duration  time.Time `json:"duration"`
-	Comment   string    `json:"comment,omitempty"`
-	Targets   string    `json:"targets,omitempty"`
+	Day       string    `bson:"day" json:"day,omitempty"`
+	StartTime time.Time `bson:"startTime" json:"startTime"`
+	EndTime   time.Time `bson:"endTime" json:"endTime"`
+	Duration  time.Time `bson:"duration" json:"duration"`
+	Comment   string    `bson:"comment" json:"comment"`
+	Targets   string    `bson:"targets" json:"targets"`
 }
 
 type QualificationRoundSchedule struct {
-	Day       string         `json:"day,omitempty"`
-	StartTime time.Time      `json:"start_time"`
-	EndTime   time.Time      `json:"end_time"`
-	Duration  time.Time      `json:"duration"`
-	Comment   string         `json:"comment,omitempty"`
-	WarmUp    WarmUpSchedule `json:"warm_up"`
+	Day       string         `bson:"day" json:"day,omitempty"`
+	StartTime time.Time      `bson:"startTime" json:"startTime"`
+	EndTime   time.Time      `bson:"endTime" json:"endTime"`
+	Duration  time.Time      `bson:"duration" json:"duration"`
+	Comment   string         `bson:"comment" json:"comment"`
+	WarmUp    WarmUpSchedule `bson:"warmUp" json:"warmUp"`
 }

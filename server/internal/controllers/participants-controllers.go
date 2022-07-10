@@ -31,7 +31,7 @@ func (c *ParticipantControllers) AddParticipant(ctx *gin.Context) {
 
 	participant, err := c.ParticipantServices.CreateParticipant(competitionId, newParticipant)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -47,7 +47,7 @@ func (c *ParticipantControllers) DeleteParticipant(ctx *gin.Context) {
 
 	err := c.ParticipantServices.DeleteParticipant(competitionId, id)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -70,7 +70,7 @@ func (c *ParticipantControllers) UpdateParticipant(ctx *gin.Context) {
 
 	result, err := c.ParticipantServices.UpdateParticipant(competitionId, participant)
 	if err != nil {
-		ctx.AbortWithError(errStatusCode(err), err)
+		ctx.AbortWithStatus(errStatusCode(err))
 		return
 	}
 
@@ -90,16 +90,11 @@ func (c *ParticipantControllers) GetParticipants(ctx *gin.Context) {
 	case "":
 		result, err = c.ParticipantServices.GetParticipants(competitionId)
 	default:
-		division := ctx.Query("div")
-		ac := ctx.Query("ac")
-		if division == "" || ac == "" {
-			ctx.AbortWithStatus(http.StatusBadRequest)
-			return
-		}
-		result, err = c.ParticipantServices.GetParticipant(competitionId, participantId, division, ac)
+		result, err = c.ParticipantServices.GetParticipant(competitionId, participantId)
 	}
 	if err != nil {
-		ctx.AbortWithStatus(http.StatusInternalServerError)
+		ctx.AbortWithStatus(errStatusCode(err))
+		return
 	}
 
 	ctx.JSON(http.StatusOK, result)

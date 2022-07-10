@@ -19,9 +19,9 @@ type ICompetitionRepoV0 interface {
 
 type IParticipantRepoV0 interface {
 	CreateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error
-	DeleteParticipant(collection *mongo.Collection, id string) error
+	DeleteParticipant(collection *mongo.Collection, competitionId, id string) error
 	UpdateParticipant(collection *mongo.Collection, participant models.CompetitionParticipant, competitionId string) error
-	GetParticipant(collection *mongo.Collection, id, competitionId, division, ac string) (models.CompetitionParticipant, error)
+	GetParticipant(collection *mongo.Collection, id, competitionId string) (models.CompetitionParticipant, error)
 	GetParticipants(collection *mongo.Collection, competitionId string) (models.CompetitionParticipantsEntity, error)
 }
 

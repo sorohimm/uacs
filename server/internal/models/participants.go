@@ -4,31 +4,31 @@ import "github.com/google/uuid"
 
 type CompetitionParticipant struct {
 	UUID              string `bson:"uuid" json:"uuid"`
-	IRMStatus         string `bson:"IRMStatus" json:"irm_status,omitempty"`
-	Code              string `bson:"code" json:"code,omitempty"`
-	Shift             string `bson:"shift" json:"shift,omitempty"`
-	FirstName         string `bson:"firstName" json:"first_name,omitempty"`
-	LastName          string `bson:"lastName" json:"last_name,omitempty"`
-	Sex               string `bson:"sex" json:"sex,omitempty"`
-	BirthDate         string `bson:"birthDate" json:"birth_date,omitempty"`
-	TargetNumber      string `bson:"targetNumber" json:"target_number,omitempty"`
-	Region            string `bson:"region" json:"region,omitempty"`
-	RegionName        string `bson:"regionName" json:"region_name,omitempty"`
-	Region2           string `bson:"region2" json:"region_2,omitempty"`
-	RegionName2       string `bson:"regionName2" json:"region_name_2,omitempty"`
-	Region3           string `bson:"region3" json:"region_3,omitempty"`
-	RegionName3       string `bson:"regionName3" json:"region_name_3,omitempty"`
-	Division          string `bson:"division" json:"division,omitempty"`
-	AgeCategory       string `bson:"class" json:"class,omitempty"`
-	AgeClass          string `bson:"ageClass" json:"age_class,omitempty"`
-	Discharge         string `bson:"discharge" json:"discharge,omitempty"`
-	IsIndividual      bool   `bson:"isIndividual" json:"is_individual,omitempty"`
-	IsTeam            bool   `bson:"isTeam" json:"is_team,omitempty"`
-	IsIndividualFinal bool   `bson:"isIndividualFinal" json:"is_individual_final,omitempty"`
-	IsTeamFinal       bool   `bson:"isTeamFinal" json:"is_team_final,omitempty"`
-	IsMixFinal        bool   `bson:"isMixFinal" json:"is_mix_final,omitempty"`
-	IsWheelchair      bool   `bson:"isWheelchair" json:"is_wheelchair,omitempty"`
-	Email             string `bson:"email" json:"email,omitempty"`
+	IRMStatus         string `bson:"IRMStatus" json:"IRMStatus,omitempty"`
+	Code              string `bson:"code" json:"code"`
+	Shift             string `bson:"shift" json:"shift"`
+	FirstName         string `bson:"firstName" json:"firstName"`
+	LastName          string `bson:"lastName" json:"lastName"`
+	Sex               string `bson:"sex" json:"sex"`
+	BirthDate         string `bson:"birthDate" json:"birthDate"`
+	TargetNumber      string `bson:"targetNumber" json:"targetNumber"`
+	Region            string `bson:"region" json:"region"`
+	RegionName        string `bson:"regionName" json:"regionName"`
+	Region2           string `bson:"region2" json:"region2"`
+	RegionName2       string `bson:"regionName2" json:"regionName2"`
+	Region3           string `bson:"region3" json:"region3"`
+	RegionName3       string `bson:"regionName3" json:"regionName3"`
+	Division          string `bson:"division" json:"division"`
+	AgeCategory       string `bson:"class" json:"class"`
+	AgeClass          string `bson:"ageClass" json:"ageClass"`
+	Discharge         string `bson:"discharge" json:"discharge"`
+	IsIndividual      bool   `bson:"isIndividual" json:"isIndividual"`
+	IsTeam            bool   `bson:"isTeam" json:"isTeam"`
+	IsIndividualFinal bool   `bson:"isIndividualFinal" json:"isIndividualFinal"`
+	IsTeamFinal       bool   `bson:"isTeamFinal" json:"isTeamFinal"`
+	IsMixFinal        bool   `bson:"isMixFinal" json:"isMixFinal"`
+	IsWheelchair      bool   `bson:"isWheelchair" json:"isWheelchair"`
+	Email             string `bson:"email" json:"email"`
 }
 
 func (c *CompetitionParticipant) GenerateUUID() {
@@ -37,34 +37,34 @@ func (c *CompetitionParticipant) GenerateUUID() {
 
 type CompetitionParticipantShortOutput struct {
 	UUID            string                `bson:"uuid" json:"uuid"`
-	FirstName       string                `bson:"firstName" json:"first_name,omitempty"`
-	LastName        string                `bson:"lastName" json:"last_name,omitempty"`
+	FirstName       string                `bson:"firstName" json:"firstName"`
+	LastName        string                `bson:"lastName" json:"lastName"`
 	Division        string                `bson:"division" json:"division"`
-	AgeCategory     string                `bson:"ageCategory" json:"age_category"`
-	Region          string                `bson:"region" json:"region,omitempty"`
-	RegionCode      string                `bson:"regionCode" json:"region_code,omitempty"`
-	DistancesPoints []DistancePointsShort `bson:"distancesPoints" json:"distances_points,omitempty"`
-	FinalPoints     int                   `bson:"finalPoints" json:"final_points,omitempty"`
-	Count10         int                   `bson:"count10" json:"count_10,omitempty"`
-	Count9          int                   `bson:"count9" json:"count_9,omitempty"`
+	AgeCategory     string                `bson:"ageCategory" json:"ageCategory"`
+	Region          string                `bson:"region" json:"region"`
+	RegionCode      string                `bson:"regionCode" json:"regionCode"`
+	DistancesPoints []DistancePointsShort `bson:"distancesPoints" json:"distancesPoints"`
+	FinalPoints     int                   `bson:"finalPoints" json:"finalPoints"`
+	Count10         int                   `bson:"count10" json:"count10"`
+	Count9          int                   `bson:"count9" json:"count9"`
 }
 
 type DistancePointsShort struct {
 	Index    int `bson:"index" json:"index,omitempty"`
 	Distance int `bson:"distance" json:"distance,omitempty"`
-	Count10  int `bson:"count10" json:"count_10,omitempty"`
+	Count10  int `bson:"count10" json:"count10,omitempty"`
 	Points   int `bson:"points" json:"points,omitempty"`
 }
 
 type CompetitionJudge struct {
 	UUID       string `bson:"uuid" json:"uuid"`
-	Code       string `bson:"code" json:"code,omitempty"`
-	FirstName  string `bson:"firstName" json:"first_name,omitempty"`
-	LastName   string `bson:"lastName" json:"last_name,omitempty"`
-	Sex        string `bson:"sex" json:"sex,omitempty"`
-	RegionCode string `bson:"regionCode" json:"region_code,omitempty"`
-	Region     string `bson:"region" json:"region,omitempty"`
-	Category   string `bson:"category" json:"category,omitempty"`
+	Code       string `bson:"code" json:"code"`
+	FirstName  string `bson:"firstName" json:"firstName"`
+	LastName   string `bson:"lastName" json:"lastName"`
+	Sex        string `bson:"sex" json:"sex"`
+	RegionCode string `bson:"regionCode" json:"regionCode"`
+	Region     string `bson:"region" json:"region"`
+	Category   string `bson:"category" json:"category"`
 }
 
 func (c *CompetitionJudge) GenerateUUID() {
