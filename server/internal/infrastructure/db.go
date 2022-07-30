@@ -9,14 +9,13 @@ import (
 	_ "go.mongodb.org/mongo-driver/mongo/readpref"
 	"go.uber.org/zap"
 	"uacs/internal/config"
-	"uacs/internal/interfaces"
 )
 
 type MongoClient struct {
 	Client *mongo.Client
 }
 
-func InitMongoClient(logger *zap.SugaredLogger, cfg *config.Config, ctx context.Context) (interfaces.IDBHandler, error) {
+func InitMongoClient(logger *zap.SugaredLogger, cfg *config.Config, ctx context.Context) (IDBHandler, error) {
 	clientOptions := options.Client().ApplyURI(cfg.DBAuthData.URL)
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {

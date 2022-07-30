@@ -3,15 +3,16 @@ package services
 import (
 	"go.uber.org/zap"
 	"uacs/internal/config"
-	"uacs/internal/interfaces"
+	"uacs/internal/infrastructure"
 	"uacs/internal/models"
+	"uacs/internal/repo"
 )
 
 type JudgeServicesV0 struct {
-	JudgeRepoV0 interfaces.IJudgeRepoV0
+	JudgeRepoV0 repo.IJudgeRepoV0
 	Log         *zap.SugaredLogger
 	Config      *config.Config
-	DbHandler   interfaces.IDBHandler
+	DbHandler   infrastructure.IDBHandler
 }
 
 func (s *JudgeServicesV0) CreateJudge(competitionId string, judge models.CompetitionJudge) (models.CompetitionJudge, error) {

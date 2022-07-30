@@ -4,15 +4,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"uacs/internal/config"
-	"uacs/internal/interfaces"
+	"uacs/internal/infrastructure"
 	"uacs/internal/models"
+	"uacs/internal/repo"
 )
 
 type CompetitionServicesV0 struct {
-	CompetitionsRepoV0 interfaces.ICompetitionRepoV0
+	CompetitionsRepoV0 repo.ICompetitionRepoV0
 	Log                *zap.SugaredLogger
 	Config             *config.Config
-	DbHandler          interfaces.IDBHandler
+	DbHandler          infrastructure.IDBHandler
 }
 
 func (s *CompetitionServicesV0) CreateCompetition(newCompetition models.Competition) (models.Competition, error) {

@@ -1,4 +1,4 @@
-package interfaces
+package infrastructure
 
 import (
 	"go.mongodb.org/mongo-driver/mongo"

@@ -3,15 +3,16 @@ package services
 import (
 	"go.uber.org/zap"
 	"uacs/internal/config"
-	"uacs/internal/interfaces"
+	"uacs/internal/infrastructure"
 	"uacs/internal/models"
+	"uacs/internal/repo"
 )
 
 type ParticipantServicesV0 struct {
-	ParticipantRepoV0 interfaces.IParticipantRepoV0
+	ParticipantRepoV0 repo.IParticipantRepoV0
 	Log               *zap.SugaredLogger
 	Config            *config.Config
-	DbHandler         interfaces.IDBHandler
+	DbHandler         infrastructure.IDBHandler
 }
 
 func (s *ParticipantServicesV0) CreateParticipant(competitionId string, participant models.CompetitionParticipant) (models.CompetitionParticipant, error) {

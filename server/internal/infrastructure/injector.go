@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"uacs/internal/config"
 	"uacs/internal/controllers"
-	"uacs/internal/interfaces"
 	"uacs/internal/middleware"
 	"uacs/internal/repo"
 	"uacs/internal/services"
@@ -25,7 +24,7 @@ type environment struct {
 	logger   *zap.SugaredLogger
 	cfg      *config.Config
 	client   *http.Client
-	dbClient interfaces.IDBHandler
+	dbClient IDBHandler
 }
 
 func (e *environment) InjectCompetitionsControllers() controllers.CompetitionControllers {

@@ -1,4 +1,4 @@
-package interfaces
+package services
 
 import "uacs/internal/models"
 
